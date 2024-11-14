@@ -25,7 +25,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "telegram_id",
-                    models.BigIntegerField(unique=True, verbose_name="ID Telegram"),
+                    models.BigIntegerField(
+                        unique=True, verbose_name="ID Telegram"
+                    ),
                 ),
                 (
                     "created_at",
@@ -56,12 +58,19 @@ class Migration(migrations.Migration):
                 ("name", models.CharField(max_length=255, verbose_name="ФИО")),
                 (
                     "phone_number",
-                    models.CharField(max_length=255, verbose_name="Номер телефона"),
+                    models.CharField(
+                        max_length=255, verbose_name="Номер телефона"
+                    ),
                 ),
-                ("email", models.EmailField(max_length=255, verbose_name="Email")),
+                (
+                    "email",
+                    models.EmailField(max_length=255, verbose_name="Email"),
+                ),
                 (
                     "referal_link",
-                    models.CharField(max_length=255, verbose_name="Реферальная ссылка"),
+                    models.CharField(
+                        max_length=255, verbose_name="Реферальная ссылка"
+                    ),
                 ),
             ],
             options={

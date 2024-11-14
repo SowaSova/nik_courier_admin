@@ -14,7 +14,10 @@ class Migration(migrations.Migration):
             model_name="partner",
             name="balance",
             field=models.DecimalField(
-                decimal_places=2, default=1, max_digits=10, verbose_name="Баланс"
+                decimal_places=2,
+                default=1,
+                max_digits=10,
+                verbose_name="Баланс",
             ),
             preserve_default=False,
         ),
@@ -36,7 +39,10 @@ class Migration(migrations.Migration):
             model_name="partner",
             name="referal_idx",
             field=models.CharField(
-                default=1, max_length=10, unique=True, verbose_name="Реферальный индекс"
+                default=1,
+                max_length=10,
+                unique=True,
+                verbose_name="Реферальный индекс",
             ),
             preserve_default=False,
         ),

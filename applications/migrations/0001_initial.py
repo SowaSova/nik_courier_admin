@@ -59,7 +59,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "payment_method",
-                    models.CharField(max_length=50, verbose_name="Способ оплаты"),
+                    models.CharField(
+                        max_length=50, verbose_name="Способ оплаты"
+                    ),
                 ),
                 (
                     "recipient_details",
@@ -108,10 +110,15 @@ class Migration(migrations.Migration):
                         auto_now=True, verbose_name="Дата последнего изменения"
                     ),
                 ),
-                ("full_name", models.CharField(max_length=255, verbose_name="ФИО")),
+                (
+                    "full_name",
+                    models.CharField(max_length=255, verbose_name="ФИО"),
+                ),
                 (
                     "phone_number",
-                    models.CharField(max_length=30, verbose_name="Номер телефона"),
+                    models.CharField(
+                        max_length=30, verbose_name="Номер телефона"
+                    ),
                 ),
                 (
                     "car_tonnage",

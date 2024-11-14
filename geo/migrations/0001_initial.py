@@ -25,7 +25,9 @@ class Migration(migrations.Migration):
                 (
                     "name",
                     models.CharField(
-                        max_length=100, unique=True, verbose_name="Название города"
+                        max_length=100,
+                        unique=True,
+                        verbose_name="Название города",
                     ),
                 ),
             ],

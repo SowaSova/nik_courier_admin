@@ -27,7 +27,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(max_length=100, verbose_name="Название вакансии"),
+                    models.CharField(
+                        max_length=100, verbose_name="Название вакансии"
+                    ),
                 ),
                 (
                     "city",

@@ -2,7 +2,9 @@ from django.db import models
 
 
 class City(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name="Название города")
+    name = models.CharField(
+        max_length=100, unique=True, verbose_name="Название города"
+    )
 
     class Meta:
         verbose_name = "Город"

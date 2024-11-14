@@ -18,7 +18,9 @@ class TelegramUser(models.Model):
 
 class Partner(TelegramUser):
     name = models.CharField(max_length=255, verbose_name="ФИО")
-    phone_number = models.CharField(max_length=255, verbose_name="Номер телефона")
+    phone_number = models.CharField(
+        max_length=255, verbose_name="Номер телефона"
+    )
     email = models.EmailField(max_length=255, verbose_name="Email")
     balance = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name="Баланс", default=0

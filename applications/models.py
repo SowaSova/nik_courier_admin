@@ -32,7 +32,9 @@ class Application(models.Model):
 
 class ProcessingApplication(Application, TelegramUser):
     full_name = models.CharField(max_length=255, verbose_name="ФИО")
-    phone_number = models.CharField(max_length=30, verbose_name="Номер телефона")
+    phone_number = models.CharField(
+        max_length=30, verbose_name="Номер телефона"
+    )
     city = models.ForeignKey(
         City, on_delete=models.SET_NULL, null=True, verbose_name="Город"
     )
@@ -71,11 +73,17 @@ class ProcessingApplication(Application, TelegramUser):
 
 
 class PaymentApplication(Application):
-    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Сумма")
-    payment_method = models.CharField(max_length=50, verbose_name="Способ оплаты")
+    amount = models.DecimalField(
+        max_digits=10, decimal_places=2, verbose_name="Сумма"
+    )
+    payment_method = models.CharField(
+        max_length=50, verbose_name="Способ оплаты"
+    )
     recipient_details = models.TextField(verbose_name="Детали получателя")
 
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name="Дата создания"
+    )
 
     class Meta:
         verbose_name = "Заявка на оплату"
@@ -93,10 +101,16 @@ class Document(models.Model):
         verbose_name="Заявка",
     )
     document_type = models.CharField(
-        max_length=20, choices=DocumentType.choices, verbose_name="Тип документа"
+        max_length=20,
+        choices=DocumentType.choices,
+        verbose_name="Тип документа",
     )
-    file = models.FileField(upload_to="documents/", verbose_name="Файл документа")
-    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата загрузки")
+    file = models.FileField(
+        upload_to="documents/", verbose_name="Файл документа"
+    )
+    uploaded_at = models.DateTimeField(
+        auto_now_add=True, verbose_name="Дата загрузки"
+    )
 
     class Meta:
         verbose_name = "Документ"

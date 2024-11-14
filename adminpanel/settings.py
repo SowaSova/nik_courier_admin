@@ -123,7 +123,9 @@ def get_app_list(self, request):
         app = app_dict_copy.pop(app_label)
         object_dict = {value: idx for idx, value in enumerate(object_list)}
         app["models"].sort(
-            key=lambda x: object_dict.get(x["object_name"], len(object_list) + 1)
+            key=lambda x: object_dict.get(
+                x["object_name"], len(object_list) + 1
+            )
         )
         yield app
 
