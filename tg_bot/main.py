@@ -22,7 +22,7 @@ async def main() -> None:
     dp.update.middleware(AccessMiddleware())
     register_handlers(dp)
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(send_scheduled_messages, "interval", seconds=5, args=[bot])
+    scheduler.add_job(send_scheduled_messages, "interval", seconds=60, args=[bot])
     scheduler.start()
 
     await dp.start_polling(bot)
