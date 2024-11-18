@@ -42,9 +42,9 @@ class PartnerAdmin(admin.ModelAdmin):
     exclude = ["is_partner"]
 
     def active_link(self, obj):
-        from adminpanel.constants import BOT_NAME
+        from django.conf import settings
 
-        url = f"https://t.me/{BOT_NAME}?start={obj.referal_idx}"
+        url = f"https://t.me/{settings.BOT_NAME}?start={obj.referal_idx}"
         return mark_safe(f"<a href='{url}' target='_blank'>{url}</a>")
 
     active_link.short_description = "Реферальная ссылка"

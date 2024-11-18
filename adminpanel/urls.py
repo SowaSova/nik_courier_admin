@@ -9,5 +9,6 @@ admin.AdminSite.get_app_list = get_app_list
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", admin.site.urls),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

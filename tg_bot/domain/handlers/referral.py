@@ -3,8 +3,8 @@ from typing import List, Optional
 from aiogram import F, Router, html
 from aiogram.types import CallbackQuery
 from asgiref.sync import sync_to_async
+from django.conf import settings
 
-from adminpanel.constants import BOT_NAME
 from bot.models import BotButton, BotMedia
 from tg_bot.utils import count_applies_from_referral
 from tg_bot.utils.bot_config import (
@@ -27,7 +27,7 @@ async def process_referral_links(
     buttons: List[BotButton],
 ):
     partner = await sync_to_async(Partner.objects.get)(telegram_id=user.telegram_id)
-    referral_link = f"https://t.me/{BOT_NAME}?start={partner.referal_idx}"
+    referral_link = f"https://t.me/{settings.BOT_NAME}?start={partner.referal_idx}"
     count = await count_applies_from_referral(user, partner)
 
     if not bot_message_text:

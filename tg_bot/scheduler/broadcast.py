@@ -18,7 +18,6 @@ async def send_scheduled_messages(bot: Bot):
     users = await sync_to_async(list)(TelegramUser.objects.all())
 
     for message in messages_to_send:
-        print(message.attachments.path)
         for user in users:
             try:
                 if message.attachments:

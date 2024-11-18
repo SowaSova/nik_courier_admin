@@ -1,7 +1,5 @@
 from django.db import models
 
-BOT_NAME = "sowa_hw_bot"
-
 
 class MediaType(models.TextChoices):
     PHOTO = "photo", "Фото"
