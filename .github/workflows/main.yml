@@ -1,0 +1,44 @@
+# name: Deploy to Server
+
+# on:
+#   push:
+#     branches:
+#       - main  # Запускать при пуше в ветку main
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       # Шаг 1: Проверка кода
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       # Шаг 2: Настройка SSH
+#       - name: Set up SSH
+#         uses: webfactory/ssh-agent@v0.7.0
+#         with:
+#           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+#       # Шаг 3: Копирование Docker Compose файла и других необходимых файлов на сервер
+#       - name: Copy Docker Compose and related files
+#         run: |
+#           scp -o StrictHostKeyChecking=no docker-compose.yml your_user@your_server_ip:/path/to/app/
+#           scp -o StrictHostKeyChecking=no .env your_user@your_server_ip:/path/to/app/
+#           # Добавьте другие файлы по необходимости
+
+#       # Шаг 4: Вход на сервер и запуск деплоя
+#       - name: Deploy to Server
+#         run: |
+#           ssh your_user@your_server_ip << 'EOF'
+#             cd /path/to/app/
+#             docker-compose pull
+#             docker-compose up -d --build
+#           EOF
+
+#       # Шаг 5: (Опционально) Очистка ненужных Docker образов
+#       - name: Clean up Docker
+#         run: |
+#           ssh your_user@your_server_ip << 'EOF'
+#             docker system prune -f
+#           EOF
