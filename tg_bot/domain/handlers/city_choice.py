@@ -60,11 +60,24 @@ async def city_selected(
             message_text = bot_message_text.format(city_name=city.name)
             vacancies_keyboard = await send_vacancies_keyboard(city_id=city_id)
 
-            await callback_query.message.edit_text(
-                message_text,
-                reply_markup=vacancies_keyboard,
-            )
-            await state.set_state(ApplicationForm.WaitingForVacancyChoice)
+            if not vacancies_keyboard:
+                # Вакансий нет, отправляем сообщение об ошибке
+                error_message, _, _ = await get_bot_message("no_vacancies_found")
+                if not error_message:
+                    error_message = "Вакансии для этого города не найдены."
+
+                await callback_query.answer(
+                    error_message, reply_markup=None, show_alert=True
+                )
+                # Устанавливаем состояние, например, ожидание выбора города
+                await state.set_state(ApplicationForm.WaitingForCityChoice)
+            else:
+                # Вакансии есть, показываем клавиатуру с вакансиями
+                await callback_query.message.edit_text(
+                    message_text,
+                    reply_markup=vacancies_keyboard,
+                )
+                await state.set_state(ApplicationForm.WaitingForVacancyChoice)
     elif current_state and current_state.startswith(PersonalCabinetForm.__name__):
         # Получаем сообщение для 'personal_cabinet_select_date'
         bot_message_text, media, buttons = await get_bot_message(

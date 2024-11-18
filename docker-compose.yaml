@@ -28,7 +28,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PWD}
       - POSTGRES_USER=${DB_USER}
     env_file:
-      - .env
+      - .env_docker
     volumes:
       - db:/var/lib/postgresql/data
     healthcheck:
@@ -37,5 +37,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+
 volumes:
   db:

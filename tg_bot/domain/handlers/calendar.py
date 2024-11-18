@@ -65,12 +65,12 @@ async def process_set_date(
         applications_text = ""
         for application in applications:
             applications_text += (
-                f"- {application.full_name}\n- {application.phone_number}\n\n"
+                f"\n- {application.full_name}\n- {application.phone_number}\n\n"
             )
 
         message_text = bot_message_text.format(applications=applications_text)
 
-        await callback_query.message.edit_text(message_text)
+        await callback_query.message.answer(message_text)
         await callback_query.answer()
     else:
         await callback_query.answer(

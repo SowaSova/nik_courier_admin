@@ -26,7 +26,7 @@ async def process_referral_links(
     media: Optional[BotMedia],
     buttons: List[BotButton],
 ):
-    partner = await sync_to_async(Partner.objects.get)(telegram_id=user.telegram_id)
+    partner = await sync_to_async(Partner.objects.get)(user=user)
     referral_link = f"https://t.me/{settings.BOT_NAME}?start={partner.referal_idx}"
     count = await count_applies_from_referral(user, partner)
 

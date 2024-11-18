@@ -21,7 +21,6 @@ class UserAdmin(admin.ModelAdmin):
 class PartnerAdmin(admin.ModelAdmin):
     list_display = [
         "name",
-        "tg_username",
         "phone_number",
         "email",
         "active_link",
@@ -34,12 +33,10 @@ class PartnerAdmin(admin.ModelAdmin):
     list_filter = ["created_at"]
     readonly_fields = [
         "created_at",
-        "telegram_id",
         "referal_idx",
     ]
     ordering = ["-created_at"]
     show_facets = admin.ShowFacets.ALWAYS
-    exclude = ["is_partner"]
 
     def active_link(self, obj):
         from django.conf import settings

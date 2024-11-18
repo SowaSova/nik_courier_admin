@@ -16,10 +16,10 @@ router = Router()
 async def process_personal_cabinet(
     callback_query: CallbackQuery, state: PersonalCabinetForm, user: TelegramUser
 ):
-    partner = await sync_to_async(Partner.objects.get)(telegram_id=user.telegram_id)
+    partner = await sync_to_async(Partner.objects.get)(user=user)
     count = await sync_to_async(
         lambda: ProcessingApplication.objects.filter(
-            user__invited_by=partner, status=ApplicationStatus.ACTIVE
+            user=user, status=ApplicationStatus.ACTIVE, user__is_partner=True
         ).count()
     )()
     full_name = f"{html.bold('ФИО: ')} {partner.name}.\n"

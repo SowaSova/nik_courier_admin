@@ -40,7 +40,14 @@ class TelegramUser(models.Model):
         super().save(*args, **kwargs)
 
 
-class Partner(TelegramUser):
+class Partner(models.Model):
+    user = models.OneToOneField(
+        TelegramUser,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        related_name="partner_profile",
+        verbose_name="Телеграм-пользователь",
+    )
     name = models.CharField(max_length=255, verbose_name="ФИО")
     phone_number = models.CharField(max_length=255, verbose_name="Номер телефона")
     email = models.EmailField(max_length=255, verbose_name="Email")
@@ -56,6 +63,7 @@ class Partner(TelegramUser):
     referal_idx = models.CharField(
         max_length=20, verbose_name="Реферальный индекс", unique=True
     )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
 
     class Meta:
         verbose_name = "Партнер"
@@ -69,5 +77,8 @@ class Partner(TelegramUser):
 
         if not self.referal_idx:
             self.referal_idx = secrets.token_urlsafe(10)
-        self.is_partner = True
+
+        self.user.is_partner = True
+        self.user.save()
+
         super().save(*args, **kwargs)

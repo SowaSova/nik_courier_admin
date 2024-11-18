@@ -21,7 +21,7 @@ class AccessMiddleware(BaseMiddleware):
         username = from_user.username
 
         user, created = await sync_to_async(TelegramUser.objects.get_or_create)(
-            tg_username=username
+            telegram_id=telegram_id, defaults={"tg_username": username}
         )
 
         if not user.telegram_id:
@@ -31,13 +31,14 @@ class AccessMiddleware(BaseMiddleware):
         if not user.is_verified:
             if event.message and event.message.text.startswith("/start "):
                 start_param = event.message.text.split(" ", 1)[1]
+                print(start_param)
                 try:
                     partner = await sync_to_async(Partner.objects.get)(
                         referal_idx=start_param
                     )
 
                     user.is_verified = True
-                    user.invited_by = partner
+                    user.invited_by_id = partner.user_id
                     await sync_to_async(user.save)()
                 except Partner.DoesNotExist:
                     await event.message.answer(
@@ -55,6 +56,10 @@ class AccessMiddleware(BaseMiddleware):
                         show_alert=True,
                     )
                 return
-        data["partner"] = await Partner.objects.aget(pk=user.invited_by_id)
+        try:
+            data["partner"] = await Partner.objects.aget(pk=user.invited_by_id)
+        except Partner.DoesNotExist:
+            data["partner"] = None
+
         data["user"] = user
         return await handler(event, data)
