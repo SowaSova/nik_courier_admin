@@ -19,6 +19,8 @@ class Application(models.Model):
         default=ApplicationStatus.NEW,
         verbose_name="Статус",
     )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+
     updated_at = models.DateTimeField(
         auto_now=True, verbose_name="Дата последнего изменения"
     )
@@ -30,11 +32,15 @@ class Application(models.Model):
         return self.status
 
 
-class ProcessingApplication(Application, TelegramUser):
-    full_name = models.CharField(max_length=255, verbose_name="ФИО")
-    phone_number = models.CharField(
-        max_length=30, verbose_name="Номер телефона"
+class ProcessingApplication(Application):
+    user = models.ForeignKey(
+        TelegramUser,
+        on_delete=models.CASCADE,
+        related_name="processing_application",
+        verbose_name="Пользователь Telegram",
     )
+    full_name = models.CharField(max_length=255, verbose_name="ФИО")
+    phone_number = models.CharField(max_length=30, verbose_name="Номер телефона")
     city = models.ForeignKey(
         City, on_delete=models.SET_NULL, null=True, verbose_name="Город"
     )
@@ -59,7 +65,6 @@ class ProcessingApplication(Application, TelegramUser):
         default=ProcessingApplicationType.FUNNEL_AGENCY,
         verbose_name="Источник",
     )
-
     invited_date = models.DateField(
         null=True, blank=True, verbose_name="Дата приглашения"
     )
@@ -73,17 +78,9 @@ class ProcessingApplication(Application, TelegramUser):
 
 
 class PaymentApplication(Application):
-    amount = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name="Сумма"
-    )
-    payment_method = models.CharField(
-        max_length=50, verbose_name="Способ оплаты"
-    )
+    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Сумма")
+    payment_method = models.CharField(max_length=50, verbose_name="Способ оплаты")
     recipient_details = models.TextField(verbose_name="Детали получателя")
-
-    created_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Дата создания"
-    )
 
     class Meta:
         verbose_name = "Заявка на оплату"
@@ -105,12 +102,8 @@ class Document(models.Model):
         choices=DocumentType.choices,
         verbose_name="Тип документа",
     )
-    file = models.FileField(
-        upload_to="documents/", verbose_name="Файл документа"
-    )
-    uploaded_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Дата загрузки"
-    )
+    file = models.FileField(upload_to="documents/", verbose_name="Файл документа")
+    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата загрузки")
 
     class Meta:
         verbose_name = "Документ"

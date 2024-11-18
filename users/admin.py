@@ -6,21 +6,27 @@ from .models import Partner, TelegramUser
 
 @admin.register(TelegramUser)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ["telegram_id", "created_at"]
+    list_display = [
+        "telegram_id",
+        "tg_username",
+        "created_at",
+        "is_partner",
+        "is_verified",
+    ]
     search_fields = ["telegram_id"]
+    list_filter = ["created_at", "is_partner"]
 
 
 @admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
     list_display = [
         "name",
-        # "telegram_id",
+        "tg_username",
         "phone_number",
         "email",
         "active_link",
     ]
     search_fields = [
-        "telegram_id",
         "name",
         "phone_number",
         "email",
@@ -33,6 +39,7 @@ class PartnerAdmin(admin.ModelAdmin):
     ]
     ordering = ["-created_at"]
     show_facets = admin.ShowFacets.ALWAYS
+    exclude = ["is_partner"]
 
     def active_link(self, obj):
         from adminpanel.constants import BOT_NAME

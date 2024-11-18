@@ -3,6 +3,19 @@ from django.db import models
 BOT_NAME = "sowa_hw_bot"
 
 
+class MediaType(models.TextChoices):
+    PHOTO = "photo", "Фото"
+    DOCUMENT = "document", "Документ"
+    AUDIO = "audio", "Аудио"
+    VIDEO = "video", "Видео"
+
+
+class ButtonType(models.TextChoices):
+    TEXT = "text", "Текстовая кнопка"
+    CALLBACK = "callback", "Callback кнопка"
+    URL = "url", "URL кнопка"
+
+
 class ProcessingApplicationType(models.TextChoices):
     FUNNEL_AGENCY = "funnel_agency", "Воронка 1 (агент)"
     FUNNEL_CPA = "funnel_cpa", "Воронка 2 (CPA)"

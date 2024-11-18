@@ -25,7 +25,7 @@ class ProcessingApplicationAdmin(admin.ModelAdmin):
         "invited_date",
     ]
     search_fields = ["full_name", "phone_number", "invited_date"]
-    readonly_fields = ["created_at", "telegram_id"]
+    readonly_fields = ["created_at"]
     list_filter = ["city", "source", "invited_date"]
     inlines = [DocumentInline]
     show_facets = admin.ShowFacets.ALWAYS

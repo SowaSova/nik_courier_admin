@@ -23,16 +23,19 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "users",
     "broadcast",
     "applications",
     "vacancies",
     "geo",
+    "bot",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -101,6 +104,9 @@ USE_TZ = True
 
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
@@ -123,9 +129,7 @@ def get_app_list(self, request):
         app = app_dict_copy.pop(app_label)
         object_dict = {value: idx for idx, value in enumerate(object_list)}
         app["models"].sort(
-            key=lambda x: object_dict.get(
-                x["object_name"], len(object_list) + 1
-            )
+            key=lambda x: object_dict.get(x["object_name"], len(object_list) + 1)
         )
         yield app
 

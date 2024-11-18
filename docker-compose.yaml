@@ -1,17 +1,22 @@
 services:
-  # web:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8000:8000"
-  #   volumes:
-  #     - .:/adminpanel
-  #   env_file:
-  #     - .env_docker
-  #   depends_on:
-  #     - db
-  #     - minio
+  web:
+    build: .
+    command: uvicorn adminpanel.asgi:application --host 0.0.0.0 --port 8000 --forwarded-allow-ips "*" --proxy-headers --workers 4
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file: .env_docker
+    environment:
+      RUN_MIGRATIONS: "true"
+      LOAD_FIXTURES: "true"
+
+  bot:
+    build: .
+    command: python manage.py runbot
+    depends_on:
+      - db
+    env_file: .env_docker
 
   db:
     image: postgres
@@ -32,24 +37,5 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-
-  # minio:
-  #   image: minio/minio:latest
-  #   container_name: minio
-  #   ports:
-  #     - "9000:9000"
-  #     - "9001:9001"
-  #   environment:
-  #     MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-  #     MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-  #     MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
-  #     MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-  #   volumes:
-  #     - minio-data:/data
-  #     - minio-config:/root/.minio
-  #   command: server /data --console-address ":9001"
-
 volumes:
   db:
-  # minio-data:
-  # minio-config:
