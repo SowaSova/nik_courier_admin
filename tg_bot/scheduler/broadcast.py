@@ -3,6 +3,7 @@ import logging
 from aiogram import Bot, exceptions
 from aiogram.types import FSInputFile
 from asgiref.sync import sync_to_async
+from django.db import close_old_connections
 from django.db.models import Q
 from django.utils import timezone
 
@@ -11,6 +12,8 @@ from users.models import TelegramUser
 
 
 async def send_scheduled_messages(bot: Bot):
+    # Ensure the database connections are valid
+    close_old_connections()
     now = timezone.now()
     messages_to_send = await sync_to_async(list)(
         BroadcastMessage.objects.filter(Q(scheduled_time__lte=now) & Q(is_sent=False))

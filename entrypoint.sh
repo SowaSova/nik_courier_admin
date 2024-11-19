@@ -1,15 +1,14 @@
 #!/bin/sh
 
-if [ "$RUN_MIGRATIONS" = "true" ]; then
-    echo "Применение миграций..."
-    python manage.py migrate
 
-    echo "Сбор статических файлов..."
-    python manage.py collectstatic --noinput
-fi
+echo "Применение миграций..."
+python manage.py migrate
 
-if [ "$LOAD_FIXTURES" = "true" ]; then
-    python manage.py loaddata initial_data.json
-fi
+echo "Сбор статических файлов..."
+python manage.py collectstatic --noinput
+
+echo "Загрузка начальных данных..."
+python manage.py loaddata fixtures/initial_data.json
+
 
 exec "$@"

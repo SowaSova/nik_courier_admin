@@ -7,9 +7,6 @@ services:
     depends_on:
       - db
     env_file: .env_docker
-    environment:
-      RUN_MIGRATIONS: "true"
-      LOAD_FIXTURES: "true"
 
   bot:
     build: .
