@@ -13,7 +13,6 @@ from users.models import TelegramUser
 
 
 async def send_scheduled_messages(bot: Bot):
-    # Ensure the database connections are valid
     now = timezone.now()
     messages_to_send = await database_sync_to_async(list)(
         BroadcastMessage.objects.filter(Q(scheduled_time__lte=now) & Q(is_sent=False))

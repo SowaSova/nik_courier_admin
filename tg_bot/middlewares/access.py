@@ -1,6 +1,7 @@
 from aiogram.dispatcher.middlewares.base import BaseMiddleware
 from aiogram.types import Message, Update
 from asgiref.sync import sync_to_async
+from channels.db import database_sync_to_async
 
 from users.models import Partner, TelegramUser
 
@@ -20,9 +21,9 @@ class AccessMiddleware(BaseMiddleware):
         telegram_id = from_user.id
         username = from_user.username
 
-        user, created = await sync_to_async(TelegramUser.objects.get_or_create)(
-            telegram_id=telegram_id, defaults={"tg_username": username}
-        )
+        user, created = await database_sync_to_async(
+            TelegramUser.objects.get_or_create
+        )(telegram_id=telegram_id, defaults={"tg_username": username})
 
         if not user.telegram_id:
             user.telegram_id = telegram_id
@@ -33,7 +34,7 @@ class AccessMiddleware(BaseMiddleware):
                 start_param = event.message.text.split(" ", 1)[1]
                 print(start_param)
                 try:
-                    partner = await sync_to_async(Partner.objects.get)(
+                    partner = await database_sync_to_async(Partner.objects.get)(
                         referal_idx=start_param
                     )
 
