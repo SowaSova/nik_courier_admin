@@ -12,23 +12,13 @@ from broadcast.models import BroadcastMessage
 from users.models import TelegramUser
 
 
-def get_broadcast_message():
-    now = timezone.now()
-    return BroadcastMessage.objects.filter(
-        Q(scheduled_time__lte=now) & Q(is_sent=False)
-    )
-
-
-def get_users():
-    return TelegramUser.objects.all()
-
-
 async def send_scheduled_messages(bot: Bot):
     # Ensure the database connections are valid
-    close_old_connections()
     now = timezone.now()
-    messages_to_send = await database_sync_to_async(list)(get_broadcast_message)()
-    users = await database_sync_to_async(list)(get_users)()
+    messages_to_send = await database_sync_to_async(list)(
+        BroadcastMessage.objects.filter(Q(scheduled_time__lte=now) & Q(is_sent=False))
+    )
+    users = await database_sync_to_async(list)(TelegramUser.objects.all())
 
     for message in messages_to_send:
         for user in users:
