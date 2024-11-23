@@ -1,47 +1,5 @@
 [
 {
-    "model": "auth.user",
-    "pk": 1,
-    "fields": {
-        "password": "pbkdf2_sha256$870000$yDTLJzFnc7S23D9uYjNZsV$QxWupQgvCCpY+BQN01N2SxdFS2QsugDWBPYUgYDYK4E=",
-        "last_login": "2024-11-16T14:59:37.328Z",
-        "is_superuser": true,
-        "username": "admin",
-        "first_name": "",
-        "last_name": "",
-        "email": "",
-        "is_staff": true,
-        "is_active": true,
-        "date_joined": "2024-11-16T14:59:26.031Z",
-        "groups": [],
-        "user_permissions": []
-    }
-},
-{
-    "model": "sessions.session",
-    "pk": "0fkor5drgoydoh97efudj9r7l29armyv",
-    "fields": {
-        "session_data": ".eJxVjEEOwiAQRe_C2hAGEahL956hmRkGqRpISrsy3l2bdKHb_977LzXiupRx7TKPU1JnBerwuxHyQ-oG0h3rrWludZkn0puid9r1tSV5Xnb376BgL9-as4kRjPURAzkxMIikE2QxzM4CWBKOghm8HyxwdiEdMVsMAJ58JPX-AOivOCA:1tCKGv:EF45zg52hmhJLWIsA9V4YQXxkNRa05vyDu8Tu5qR9P4",
-        "expire_date": "2024-11-30T14:59:37.333Z"
-    }
-},
-{
-    "model": "sessions.session",
-    "pk": "rf7n06atv3fjflx9oe3j6uo1hlco8cse",
-    "fields": {
-        "session_data": ".eJxVjEEOwiAQRe_C2hAGEahL956hmRkGqRpISrsy3l2bdKHb_977LzXiupRx7TKPU1JnBerwuxHyQ-oG0h3rrWludZkn0puid9r1tSV5Xnb376BgL9-as4kRjPURAzkxMIikE2QxzM4CWBKOghm8HyxwdiEdMVsMAJ58JPX-AOivOCA:1tEPoZ:znPjcGLyG8IXaN2gMeyaXq7Bf4AIlNc9WXQEn_Ji87w",
-        "expire_date": "2024-12-06T09:18:59.098Z"
-    }
-},
-{
-    "model": "sessions.session",
-    "pk": "sws8ookhrr8jczsr98qiv5a80yr1pz45",
-    "fields": {
-        "session_data": ".eJxVjEEOwiAQRe_C2hAGEahL956hmRkGqRpISrsy3l2bdKHb_977LzXiupRx7TKPU1JnBerwuxHyQ-oG0h3rrWludZkn0puid9r1tSV5Xnb376BgL9-as4kRjPURAzkxMIikE2QxzM4CWBKOghm8HyxwdiEdMVsMAJ58JPX-AOivOCA:1tEODf:A2H8jc7XxLwob3wOaSF5FcQlTrmd8-FWiVG8p6_G6mU",
-        "expire_date": "2024-12-06T07:36:47.073Z"
-    }
-},
-{
     "model": "users.telegramchannel",
     "pk": 1,
     "fields": {
