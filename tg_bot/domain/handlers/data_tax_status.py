@@ -2,13 +2,15 @@ from typing import List, Optional
 
 from aiogram import Router
 from aiogram.fsm.context import FSMContext
-from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import (
+    CallbackQuery,
+)
 
 from adminpanel.constants import CarTonnage
-from bot.models import BotButton, BotMedia
+from apps.bot.models import BotButton, BotMedia
+from apps.users.models import TelegramUser
 from tg_bot.domain.states import ApplicationForm
 from tg_bot.utils.bot_config import create_reply_markup, with_bot_message
-from users.models import TelegramUser
 
 router = Router()
 

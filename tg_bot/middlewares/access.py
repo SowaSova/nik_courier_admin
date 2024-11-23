@@ -3,7 +3,7 @@ from aiogram.types import Message, Update
 from asgiref.sync import sync_to_async
 from channels.db import database_sync_to_async
 
-from users.models import Partner, TelegramUser
+from apps.users.models import Partner, TelegramUser
 
 
 class AccessMiddleware(BaseMiddleware):
@@ -28,11 +28,13 @@ class AccessMiddleware(BaseMiddleware):
         if not user.telegram_id:
             user.telegram_id = telegram_id
             await sync_to_async(user.save)()
+        if not user.invited_by_id:
+            user.invited_by = user
+            await sync_to_async(user.save)()
 
         if not user.is_verified:
             if event.message and event.message.text.startswith("/start "):
                 start_param = event.message.text.split(" ", 1)[1]
-                print(start_param)
                 try:
                     partner = await database_sync_to_async(Partner.objects.get)(
                         referal_idx=start_param
@@ -61,6 +63,5 @@ class AccessMiddleware(BaseMiddleware):
             data["partner"] = await Partner.objects.aget(pk=user.invited_by_id)
         except Partner.DoesNotExist:
             data["partner"] = None
-
         data["user"] = user
         return await handler(event, data)

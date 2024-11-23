@@ -7,12 +7,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+PROJECT_ROOT = Path(__file__).parent
 
 SECRET_KEY = os.getenv("SECRET_KEY")
-BOT_NAME = os.getenv("BOT_NAME")
 
 DEBUG = os.getenv("DEBUG")
+
 
 ALLOWED_HOSTS = ["*"]
 
@@ -25,12 +25,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
-    "users",
-    "broadcast",
-    "applications",
-    "vacancies",
-    "geo",
-    "bot",
+    "apps.users.apps.UsersConfig",
+    "apps.broadcast.apps.BroadcastConfig",
+    "apps.applications.apps.ApplicationsConfig",
+    "apps.vacancies.apps.VacanciesConfig",
+    "apps.geo.apps.GeoConfig",
+    "apps.bot.apps.BotConfig",
+    "tg_bot",
 ]
 
 MIDDLEWARE = [
@@ -64,7 +65,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "adminpanel.wsgi.application"
 ASGI_APPLICATION = "adminpanel.asgi.application"
-
 
 DATABASES = {
     "default": {
@@ -113,6 +113,27 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# CELERY
+
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+CELERY_BROKER_POOL_LIMIT = None
+
+# TG BOT
+
+BOT_NAME = os.getenv("BOT_NAME")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+# BITRIX
+
+BITRIX_WEBHOOK_URL = os.getenv("BITRIX_WEBHOOK_URL")
+BITRIX_WH_CRM = os.getenv("BITRIX_WH_CRM")
+BITRIX_WH_FILES = os.getenv("BITRIX_WH_FILES")
+BITRIX_FOLDER_ID = os.getenv("BITRIX_FOLDER_ID")
+BITRIX_WEBHOOK_TOKEN = os.getenv("BITRIX_WEBHOOK_TOKEN")
+
+# ADMIN REORDER
 
 ADMIN_ORDERING = [
     ("users", ["TelegramUser", "Partner"]),

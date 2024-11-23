@@ -2,9 +2,10 @@ from aiogram import F, Router
 from aiogram.types import CallbackQuery
 
 from adminpanel.constants import ProcessingApplicationType
+from apps.users.models import Partner
 from tg_bot.domain.keyboards.city_choice import send_cities_keyboard
 from tg_bot.domain.states import ApplicationForm
-from users.models import Partner
+from tg_bot.utils.bot_config import get_bot_message
 
 router = Router()
 
@@ -13,7 +14,6 @@ router = Router()
 async def process_start_application(
     callback_query: CallbackQuery, state: ApplicationForm, partner: Partner
 ):
-    cities_kb = await send_cities_keyboard()
     partner_application = partner.proccess_type
     application_type = (
         ProcessingApplicationType.FUNNEL_AGENCY
@@ -21,8 +21,10 @@ async def process_start_application(
         else ProcessingApplicationType.FUNNEL_CPA
     )
     await state.update_data(application_type=application_type)
+    cities_kb = await send_cities_keyboard()
     if not cities_kb:
-        await callback_query.message.answer("Нет доступных городов")
+        msg = await get_bot_message("cities_not_found")
+        await callback_query.message.answer(msg or "Нет доступных городов")
         return
     await callback_query.message.answer("Выберите город:", reply_markup=cities_kb)
     await state.set_state(ApplicationForm.WaitingForCityChoice)

@@ -4,12 +4,11 @@ from aiogram import Bot, exceptions
 from aiogram.types import FSInputFile
 from asgiref.sync import sync_to_async
 from channels.db import database_sync_to_async
-from django.db import close_old_connections
 from django.db.models import Q
 from django.utils import timezone
 
-from broadcast.models import BroadcastMessage
-from users.models import TelegramUser
+from apps.broadcast.models import BroadcastMessage
+from apps.users.models import TelegramUser
 
 
 async def send_scheduled_messages(bot: Bot):

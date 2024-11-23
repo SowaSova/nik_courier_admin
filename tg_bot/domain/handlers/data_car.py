@@ -1,11 +1,13 @@
 from aiogram import Router
 from aiogram.fsm.context import FSMContext
-from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import (
+    CallbackQuery,
+)
 
+from apps.users.models import TelegramUser
 from tg_bot.domain.keyboards.calendar import create_calendar
 from tg_bot.domain.states import ApplicationForm
 from tg_bot.utils.bot_config import create_reply_markup, get_bot_message
-from users.models import TelegramUser
 
 router = Router()
 

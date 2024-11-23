@@ -3,6 +3,8 @@ from math import ceil
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+from tg_bot.core.constants import ITEMS_PER_PAGE
+
 
 class PaginationKeyboard:
     def __init__(
@@ -13,7 +15,7 @@ class PaginationKeyboard:
         entity,
         city_id=None,
         page=1,
-        items_per_page=5,
+        items_per_page=ITEMS_PER_PAGE,
     ):
         self.items = items
         self.item_callback = item_callback

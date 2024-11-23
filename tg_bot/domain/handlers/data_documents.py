@@ -1,17 +1,16 @@
 import os
 import tempfile
-from typing import Union
 
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, ContentType, Message
 
 from adminpanel.constants import DocumentType, TaxStatus
+from apps.users.models import Partner, TelegramUser
 from tg_bot.domain.keyboards import create_calendar
 from tg_bot.domain.states import ApplicationForm
 from tg_bot.utils.apply_processing import finalize_application
 from tg_bot.utils.bot_config import get_bot_message, send_bot_message
-from users.models import TelegramUser
 
 router = Router()
 
@@ -76,7 +75,10 @@ async def process_document_choice(
     F.content_type.in_({ContentType.PHOTO, ContentType.DOCUMENT}),
 )
 async def process_document_upload(
-    message: Message, state: FSMContext, user: TelegramUser
+    message: Message,
+    state: FSMContext,
+    user: TelegramUser,
+    partner: Partner = None,
 ):
     data = await state.get_data()
     pending_documents = data.get("pending_documents", [])
@@ -113,7 +115,7 @@ async def process_document_upload(
         return
 
     temp_dir = tempfile.gettempdir()
-    file_name = f"{file_unique_id}"
+    file_name = f"{current_document['document_type']}_{file_unique_id}"
     file_path = os.path.join(temp_dir, file_name)
 
     await download_file(message.bot, file_id, file_path)
@@ -148,7 +150,7 @@ async def process_document_upload(
             bot_message_text = "Спасибо, все документы получены."
 
         await send_bot_message(message, bot_message_text, media, None, user)
-        await finalize_application(state, message, user)
+        await finalize_application(state, message, user, partner)
 
 
 async def prompt_for_next_document(

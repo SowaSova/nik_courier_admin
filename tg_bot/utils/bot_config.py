@@ -11,7 +11,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from asgiref.sync import sync_to_async
 
 from adminpanel.constants import MediaType
-from bot.models import BotButton, BotMedia, BotMessage
+from apps.bot.models import BotButton, BotMedia, BotMessage
 
 
 async def get_bot_message(
@@ -28,7 +28,9 @@ async def get_bot_message(
         return None, None, []
 
 
-def create_reply_markup(buttons: List[BotButton]) -> Optional[InlineKeyboardMarkup]:
+def create_reply_markup(
+    buttons: List[BotButton],
+) -> Optional[InlineKeyboardMarkup]:
     if not buttons:
         return None
     builder = InlineKeyboardBuilder()

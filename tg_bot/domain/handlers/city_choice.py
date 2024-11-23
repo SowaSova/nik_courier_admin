@@ -1,18 +1,16 @@
-from typing import Union
-
 from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from asgiref.sync import sync_to_async
 
-from geo.models import City
+from apps.geo.models import City
+from apps.users.models import TelegramUser
 from tg_bot.domain.callbacks import CityCallback
 from tg_bot.domain.keyboards import create_calendar
 from tg_bot.domain.keyboards.vacancy_choice import send_vacancies_keyboard
-from tg_bot.domain.states import ApplicationForm
+from tg_bot.domain.states import ApplicationForm, TrainingCandidateForm
 from tg_bot.domain.states.personal_cabinet import PersonalCabinetForm
 from tg_bot.utils.bot_config import get_bot_message
-from users.models import TelegramUser
 
 router = Router()
 
@@ -35,9 +33,36 @@ async def city_selected(
 
     await state.update_data(city_id=city_id)
 
-    if current_state and current_state.startswith(ApplicationForm.__name__):
+    if current_state and current_state.startswith(TrainingCandidateForm.__name__):
+        bot_message_text, media, buttons = await get_bot_message(
+            "city_selected_choose_vacancy"
+        )
+        if not bot_message_text:
+            bot_message_text = "Вы выбрали город: {city_name}. Выберите вакансию:"
+
+        message_text = bot_message_text.format(city_name=city.name)
+        vacancies_keyboard = await send_vacancies_keyboard(city_id=city_id)
+
+        if not vacancies_keyboard:
+            # Вакансий нет, отправляем сообщение об ошибке
+            error_message, _, _ = await get_bot_message("no_vacancies_found")
+            if not error_message:
+                error_message = "Вакансии для этого города не найдены."
+
+            await callback_query.answer(
+                error_message, reply_markup=None, show_alert=True
+            )
+            # Устанавливаем состояние, например, ожидание выбора города
+            await state.set_state(TrainingCandidateForm.WaitingForCityChoice)
+        else:
+            # Вакансии есть, показываем клавиатуру с вакансиями
+            await callback_query.message.edit_text(
+                message_text,
+                reply_markup=vacancies_keyboard,
+            )
+            await state.set_state(TrainingCandidateForm.WaitingForVacancyChoice)
+    elif current_state and current_state.startswith(ApplicationForm.__name__):
         if data.get("referral"):
-            # Получаем сообщение для 'city_selected_referral_fullname'
             bot_message_text, media, buttons = await get_bot_message(
                 "city_selected_referral_fullname"
             )
@@ -48,7 +73,6 @@ async def city_selected(
             await callback_query.message.edit_text(message_text)
             await state.set_state(ApplicationForm.WaitingForFullName)
         else:
-            # Получаем сообщение для 'city_selected_choose_vacancy'
             bot_message_text, media, buttons = await get_bot_message(
                 "city_selected_choose_vacancy"
             )
@@ -61,7 +85,6 @@ async def city_selected(
             vacancies_keyboard = await send_vacancies_keyboard(city_id=city_id)
 
             if not vacancies_keyboard:
-                # Вакансий нет, отправляем сообщение об ошибке
                 error_message, _, _ = await get_bot_message("no_vacancies_found")
                 if not error_message:
                     error_message = "Вакансии для этого города не найдены."
@@ -69,17 +92,14 @@ async def city_selected(
                 await callback_query.answer(
                     error_message, reply_markup=None, show_alert=True
                 )
-                # Устанавливаем состояние, например, ожидание выбора города
                 await state.set_state(ApplicationForm.WaitingForCityChoice)
             else:
-                # Вакансии есть, показываем клавиатуру с вакансиями
                 await callback_query.message.edit_text(
                     message_text,
                     reply_markup=vacancies_keyboard,
                 )
                 await state.set_state(ApplicationForm.WaitingForVacancyChoice)
     elif current_state and current_state.startswith(PersonalCabinetForm.__name__):
-        # Получаем сообщение для 'personal_cabinet_select_date'
         bot_message_text, media, buttons = await get_bot_message(
             "personal_cabinet_select_date"
         )
@@ -91,7 +111,6 @@ async def city_selected(
         )
         await state.set_state(PersonalCabinetForm.WaitingForDate)
     else:
-        # Получаем сообщение об ошибке 'unknown_state'
         bot_message_text, _, _ = await get_bot_message("unknown_state")
         if not bot_message_text:
             bot_message_text = "Неизвестное состояние"

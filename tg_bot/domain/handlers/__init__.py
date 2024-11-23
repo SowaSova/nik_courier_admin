@@ -15,6 +15,7 @@ from .personal_cabinet import router as personal_cabinet_router
 from .referral import router as referral_router
 from .start import router as start_router
 from .status_choice import router as status_choice_router
+from .training import router as training_router
 
 
 def register_handlers(dp: Dispatcher):
@@ -34,4 +35,5 @@ def register_handlers(dp: Dispatcher):
         referral_router,
         create_apply_router,
         data_vacancy_router,
+        training_router,
     )

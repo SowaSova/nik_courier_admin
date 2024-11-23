@@ -1,8 +1,8 @@
 from asgiref.sync import sync_to_async
 
+from apps.vacancies.models import Vacancy
 from tg_bot.domain.callbacks import PaginationCallback, VacancyCallback
 from tg_bot.utils import PaginationKeyboard
-from vacancies.models import Vacancy
 
 
 async def send_vacancies_keyboard(page: int = 1, city_id: int = None):

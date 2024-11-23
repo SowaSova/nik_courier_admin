@@ -1,7 +1,7 @@
 from asgiref.sync import sync_to_async
 
-from applications.models import ProcessingApplication
-from users.models import TelegramUser
+from apps.applications.models import ProcessingApplication
+from apps.users.models import TelegramUser
 
 
 async def application_exists(user: TelegramUser) -> bool:

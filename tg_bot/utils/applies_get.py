@@ -1,8 +1,12 @@
 from aiogram.fsm.context import FSMContext
 from asgiref.sync import sync_to_async
+from channels.db import database_sync_to_async
 
-from applications.models import ProcessingApplication
-from users.models import Partner, TelegramUser
+from adminpanel.constants import ApplicationStatus
+from apps.applications.models import ProcessingApplication
+from apps.geo.models import City
+from apps.users.models import Partner, TelegramUser
+from apps.vacancies.models import Vacancy
 
 
 async def get_applies(
@@ -20,6 +24,31 @@ async def get_applies(
         )
     )
     return applications
+
+
+async def get_applies_by_vacancy(vacancy: Vacancy, partner: Partner = None):
+    status = ApplicationStatus.CLOSED
+    applications = await sync_to_async(list)(
+        ProcessingApplication.objects.select_related("user").filter(
+            vacancy_id=vacancy.id,
+            status=status,
+            partner=partner,
+        )
+    )
+    return applications
+
+
+async def get_vacancy(
+    user: TelegramUser, state: FSMContext, partner: Partner = None
+) -> Vacancy:
+    data = await state.get_data()
+    vacancy_id = data.get("vacancy_id")
+    city_id = data.get("city_id")
+    vacancy = await database_sync_to_async(Vacancy.objects.get)(
+        id=vacancy_id, city_id=city_id
+    )
+    city = await database_sync_to_async(City.objects.get)(id=city_id)
+    return vacancy, city
 
 
 async def count_applies_from_referral(user: TelegramUser, partner: Partner) -> int:

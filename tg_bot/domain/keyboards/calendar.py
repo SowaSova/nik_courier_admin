@@ -6,7 +6,8 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
 def create_calendar(
-    year: int = datetime.now(tz=None).year, month: int = datetime.now(tz=None).month
+    year: int = datetime.now(tz=None).year,
+    month: int = datetime.now(tz=None).month,
 ):
     builder = InlineKeyboardBuilder()
     keyboard = []
@@ -29,11 +30,14 @@ def create_calendar(
         row = []
         for day in week:
             if day == 0:
-                row.append(InlineKeyboardButton(text=" ", callback_data="ignore"))
+                row.append(
+                    InlineKeyboardButton(text=" ", callback_data="ignore")
+                )
             else:
                 row.append(
                     InlineKeyboardButton(
-                        text=str(day), callback_data=f"set_date:{year}:{month}:{day}"
+                        text=str(day),
+                        callback_data=f"set_date:{year}:{month}:{day}",
                     )
                 )
         builder.row(*row)
@@ -45,12 +49,14 @@ def create_calendar(
     )  # Переходим к следующему месяцу
     row.append(
         InlineKeyboardButton(
-            text="⏪", callback_data=f"prev_month:{prev_month.year}:{prev_month.month}"
+            text="⏪",
+            callback_data=f"prev_month:{prev_month.year}:{prev_month.month}",
         )
     )
     row.append(
         InlineKeyboardButton(
-            text="⏩", callback_data=f"next_month:{next_month.year}:{next_month.month}"
+            text="⏩",
+            callback_data=f"next_month:{next_month.year}:{next_month.month}",
         )
     )
     builder.row(*row)

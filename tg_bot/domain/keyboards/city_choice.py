@@ -1,6 +1,6 @@
 from asgiref.sync import sync_to_async
 
-from geo.models import City
+from apps.geo.models import City
 from tg_bot.domain.callbacks import CityCallback, PaginationCallback
 from tg_bot.utils import PaginationKeyboard
 

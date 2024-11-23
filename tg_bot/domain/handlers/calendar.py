@@ -1,15 +1,15 @@
 from datetime import datetime
 
-from aiogram import F, Router, html
+from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 
+from apps.users.models import Partner, TelegramUser
 from tg_bot.domain.keyboards import create_calendar
 from tg_bot.domain.states.application import ApplicationForm
 from tg_bot.domain.states.personal_cabinet import PersonalCabinetForm
 from tg_bot.utils import finalize_application
 from tg_bot.utils.bot_config import get_bot_message
-from users.models import TelegramUser
 
 router = Router()
 
@@ -19,6 +19,7 @@ async def process_set_date(
     callback_query: CallbackQuery,
     state: FSMContext,
     user: TelegramUser,
+    partner: Partner = None,
 ):
     cur_state = await state.get_state()
     _, year, month, day = callback_query.data.split(":")
@@ -45,7 +46,7 @@ async def process_set_date(
         )
 
         await callback_query.message.edit_text(message_text)
-        await finalize_application(state, callback_query.message, user)
+        await finalize_application(state, callback_query.message, user, partner)
     elif cur_state and cur_state.startswith(PersonalCabinetForm.__name__):
         from tg_bot.utils import get_applies
 
