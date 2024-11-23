@@ -2,6 +2,7 @@
 
 
 echo "Применение миграций..."
+python manage.py makemigrations
 python manage.py migrate
 
 echo "Сбор статических файлов..."

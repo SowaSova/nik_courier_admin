@@ -20,8 +20,7 @@ logger = logging.getLogger(__name__)
 
 @shared_task
 def send_to_bitrix(application_id):
-    from applications.models import Document, ProcessingApplication
-
+    from apps.applications.models import Document, ProcessingApplication
     from tg_bot.utils.bitrix import (
         attach_files_to_deal,
         create_lead_in_bitrix,
@@ -187,7 +186,7 @@ def send_scheduled_messages():
 
 @shared_task
 def finalize_application_task(application_id):
-    from applications.models import ProcessingApplication
+    from apps.applications.models import ProcessingApplication
 
     application = ProcessingApplication.objects.get(id=application_id)
     if not application.is_finalized:

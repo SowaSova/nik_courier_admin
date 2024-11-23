@@ -82,7 +82,7 @@ def upload_file_to_bitrix(document):
 
 
 def upload_documents_to_bitrix(application):
-    from applications.models import Document
+    from apps.applications.models import Document
 
     documents = Document.objects.filter(application=application)
 
