@@ -15,7 +15,7 @@ def bitrix_webhook(request):
     try:
         # Получаем данные из запроса
         data = request.POST
-
+        print(data)
         # Проверяем наличие токена
         token = data.get("auth[application_token]")
         if not token or token != settings.BITRIX_WEBHOOK_TOKEN:
@@ -28,6 +28,9 @@ def bitrix_webhook(request):
             deal_id = data.get("data[FIELDS][ID]")
             # Ваш код обработки обновления сделки
             process_deal_update(deal_id)
+        # elif event in "ONCRMINVOICEUSERFIELDSETENUMVALUES":
+        #     print(event)
+        #     logger.info(f"Обработано событие: {event}")
         else:
             logger.warning(f"Неизвестное событие: {event}")
 
@@ -65,9 +68,10 @@ def process_deal_update(deal_id):
 
 
 def update_application_from_deal(deal):
-    from applications.models import ProcessingApplication
     from django.db import transaction
-    from users.models import Partner
+
+    from apps.applications.models import ProcessingApplication
+    from apps.users.models import Partner
 
     lead_id = deal.get("LEAD_ID")  # Получаем LEAD_ID из данных сделки
     status = deal.get("STAGE_ID")  # Получаем текущий статус сделки

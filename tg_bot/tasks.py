@@ -23,8 +23,8 @@ def send_to_bitrix(application_id):
     from apps.applications.models import Document, ProcessingApplication
     from tg_bot.utils.bitrix import (
         attach_files_to_deal,
+        attach_files_to_lead,
         create_lead_in_bitrix,
-        get_deal_id_from_lead,
         upload_documents_to_bitrix,
     )
 
@@ -47,14 +47,14 @@ def send_to_bitrix(application_id):
         if has_documents:
             # Загружаем документы и получаем их IDs
             file_ids = upload_documents_to_bitrix(application)
-
+            attach_files_to_lead(lead_id, file_ids)
             # Получаем ID сделки, созданной из лида
-            deal_id = get_deal_id_from_lead(lead_id)
-            if deal_id:
-                # Прикрепляем файлы к сделке
-                attach_files_to_deal(deal_id, file_ids)
-            else:
-                logger.error(f"Не удалось получить ID сделки для лида {lead_id}.")
+            # deal_id = get_deal_id_from_lead(lead_id)
+            # if deal_id:
+            #     # Прикрепляем файлы к сделке
+            #     attach_files_to_deal(deal_id, file_ids)
+            # else:
+            #     logger.error(f"Не удалось получить ID сделки для лида {lead_id}.")
         else:
             logger.error("Нет документов для загрузки.")
     else:

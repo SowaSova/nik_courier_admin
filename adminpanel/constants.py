@@ -15,8 +15,8 @@ class ButtonType(models.TextChoices):
 
 
 class ProcessingApplicationType(models.TextChoices):
-    FUNNEL_AGENCY = "funnel_agency", "Воронка 1 (агент)"
-    FUNNEL_CPA = "funnel_cpa", "Воронка 2 (CPA)"
+    FUNNEL_AGENCY = "funnel_agency", "Агент"
+    FUNNEL_CPA = "funnel_cpa", "CPA"
     REFERRAL = "referral", "Реферальная"
 
 
@@ -28,7 +28,7 @@ class ApplicationStatus(models.TextChoices):
 
 class TaxStatus(models.TextChoices):
     SMZ = "СМЗ", "Самозанятый"
-    IP = "ИП", "Индивидуальный предприниматель"
+    IP = "152", "Индивидуальный предприниматель"
     PHYS = "Физ", "Физическое лицо"
 
 

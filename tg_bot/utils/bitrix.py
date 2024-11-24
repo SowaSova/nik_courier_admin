@@ -14,15 +14,15 @@ def create_lead_in_bitrix(application):
     )
     method = "crm.lead.add.json"
     url = f"{BITRIX_WEBHOOK_URL}{method}"
-    source = ProcessingApplicationType(application.source).label
-    data = {
+    source = ProcessingApplicationType(application.source)
+    data = {  # Тестовый
         "fields": {
             "TITLE": f"Лид от {application.partner}",
             "NAME": application.full_name,
             "PHONE": [{"VALUE": application.phone_number, "VALUE_TYPE": "WORK"}],
             "ADDRESS": application.city.name,
             "UF_CRM_1732013449": application.vacancy.name,  # Вакансия
-            "UF_CRM_1732012920": application.car_tonnage,  # Грузоподъемность
+            "UF_CRM_1732439536": int(application.car_tonnage),  # Грузоподъемность
             "UF_CRM_1732013460": application.tax_status,  # Статус налогоплательщика
             "UF_CRM_1732013470": source,  # Источник(воронка)
             "UF_CRM_1732013482": (
@@ -32,6 +32,24 @@ def create_lead_in_bitrix(application):
             ),  # Дата записи
         }
     }
+    # title = f"{application.partner}({source})_{application.city.name}_{application.full_name}"
+    # data = {
+    #     "fields": {
+    #         "TITLE": title,
+    #         "NAME": application.full_name,
+    #         "PHONE": [{"VALUE": application.phone_number, "VALUE_TYPE": "WORK"}],
+    #         "ADDRESS": application.city.name,
+    #         # "UF_CRM_1732013449": application.vacancy.name,  # Вакансия
+    #         "UF_CRM_1727558842072": application.car_tonnage,  # Грузоподъемность
+    #         "UF_CRM_1727558736573": application.tax_status,  # Статус налогоплательщика
+    #         # "UF_CRM_1732013470": source,  # Источник(воронка)
+    #         "UF_CRM_1727558891776": (
+    #             application.invited_date.strftime("%Y-%m-%d")
+    #             if application.invited_date
+    #             else None
+    #         ),  # Дата записи
+    #     }
+    # }
     try:
         response = requests.post(url, json=data, timeout=10)
         response.raise_for_status()
@@ -154,3 +172,33 @@ def attach_files_to_deal(deal_id, file_ids):
             logger.error(f"Ошибка при привязке файлов к сделке: {result}")
     except requests.exceptions.RequestException as e:
         logger.error(f"Ошибка при привязке файлов к сделке: {e}")
+
+
+def attach_files_to_lead(lead_id, file_id):
+    import requests
+    from django.conf import settings
+
+    BITRIX_WEBHOOK_URL = settings.BITRIX_WEBHOOK_URL.format(
+        token=settings.BITRIX_WH_CRM  # Убедитесь, что у вас правильный токен
+    )
+    method = "crm.lead.update.json"
+    url = f"{BITRIX_WEBHOOK_URL}{method}"
+
+    data = {
+        "id": lead_id,
+        "fields": {
+            "UF_CRM_673D936E88F7C": file_id,  # Замените на реальный код пользовательского поля для файлов в сделке
+        },
+        "params": {"REGISTER_SONET_EVENT": "Y"},
+    }
+
+    try:
+        response = requests.post(url, json=data)
+        response.raise_for_status()
+        result = response.json()
+        if result.get("result"):
+            logger.info(f"Файл успешно привязан к лиду {lead_id}.")
+        else:
+            logger.error(f"Ошибка при привязке файла к лиду: {result}")
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Ошибка при привязке файла к лиду: {e}")
