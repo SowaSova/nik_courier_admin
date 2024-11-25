@@ -1,10 +1,13 @@
 import json
 import logging
 
+import requests
 from django.conf import settings
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+
+from apps.geo.models import City
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +18,7 @@ def bitrix_webhook(request):
     try:
         # Получаем данные из запроса
         data = request.POST
-        print(data)
+        # print(request.POST or request.PATCH or request.UPDATE)
         # Проверяем наличие токена
         token = data.get("auth[application_token]")
         if not token or token != settings.BITRIX_WEBHOOK_TOKEN:
@@ -28,9 +31,10 @@ def bitrix_webhook(request):
             deal_id = data.get("data[FIELDS][ID]")
             # Ваш код обработки обновления сделки
             process_deal_update(deal_id)
-        # elif event in "ONCRMINVOICEUSERFIELDSETENUMVALUES":
-        #     print(event)
-        #     logger.info(f"Обработано событие: {event}")
+        elif event == "ONCRMLEADUSERFIELDSETENUMVALUES":
+            field_name = data.get("data[FIELDS][FIELD_NAME]")
+            if field_name == "UF_CRM_1732439536":
+                update_city_list()
         else:
             logger.warning(f"Неизвестное событие: {event}")
 
@@ -144,3 +148,49 @@ def map_status_from_bitrix(bitrix_status):
         # Добавьте остальные соответствия
     }
     return STATUS_MAPPING.get(bitrix_status, bitrix_status.lower())
+
+
+def update_city_list():
+    cities = get_updated_city_list()
+    existing_city_ids = set(City.objects.values_list("btx_id", flat=True))
+    incoming_city_ids = set()
+
+    for city_data in cities:
+        btx_id = city_data["btx_id"]
+        name = city_data["name"]
+        incoming_city_ids.add(btx_id)
+        City.objects.update_or_create(btx_id=btx_id, defaults={"name": name})
+
+    # Удаляем города, которых нет в Bitrix24
+    cities_to_delete = existing_city_ids - incoming_city_ids
+    if cities_to_delete:
+        City.objects.filter(btx_id__in=cities_to_delete).delete()
+
+
+def get_updated_city_list():
+    from apps.applications.models import City
+
+    # Получаем список городов из Bitrix24
+    BITRIX_WEBHOOK_URL = settings.BITRIX_WEBHOOK_URL.format(
+        token=settings.BITRIX_WH_CRM
+    )  # Ваш вебхук URL для вызова методов API
+    method = "crm.lead.fields.json"
+    url = f"{BITRIX_WEBHOOK_URL}{method}"
+
+    try:
+        response = requests.get(url)
+        data = response.json()
+        field_id = "UF_CRM_1727558363198"
+        field_info = data["result"].get(field_id)
+        if field_info and "items" in field_info:
+            items = field_info["items"]
+            cities = []
+            for item in items:
+                city = {"btx_id": int(item["ID"]), "name": item["VALUE"]}
+                cities.append(city)
+            return cities
+        else:
+            return []
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Ошибка при обращении к Bitrix24: {e}")
+        return []

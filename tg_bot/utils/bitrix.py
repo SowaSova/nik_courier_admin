@@ -15,41 +15,42 @@ def create_lead_in_bitrix(application):
     method = "crm.lead.add.json"
     url = f"{BITRIX_WEBHOOK_URL}{method}"
     source = ProcessingApplicationType(application.source)
-    data = {  # Тестовый
-        "fields": {
-            "TITLE": f"Лид от {application.partner}",
-            "NAME": application.full_name,
-            "PHONE": [{"VALUE": application.phone_number, "VALUE_TYPE": "WORK"}],
-            "ADDRESS": application.city.name,
-            "UF_CRM_1732013449": application.vacancy.name,  # Вакансия
-            "UF_CRM_1732439536": int(application.car_tonnage),  # Грузоподъемность
-            "UF_CRM_1732013460": application.tax_status,  # Статус налогоплательщика
-            "UF_CRM_1732013470": source,  # Источник(воронка)
-            "UF_CRM_1732013482": (
-                application.invited_date.strftime("%Y-%m-%d")
-                if application.invited_date
-                else None
-            ),  # Дата записи
-        }
-    }
-    # title = f"{application.partner}({source})_{application.city.name}_{application.full_name}"
-    # data = {
+    title = f"{application.partner}({source})_{application.city.name}_{application.full_name}"
+
+    # data = {  # Тестовый
     #     "fields": {
-    #         "TITLE": title,
+    #         "TITLE": f"Лид от {application.partner}",
     #         "NAME": application.full_name,
     #         "PHONE": [{"VALUE": application.phone_number, "VALUE_TYPE": "WORK"}],
     #         "ADDRESS": application.city.name,
-    #         # "UF_CRM_1732013449": application.vacancy.name,  # Вакансия
-    #         "UF_CRM_1727558842072": application.car_tonnage,  # Грузоподъемность
-    #         "UF_CRM_1727558736573": application.tax_status,  # Статус налогоплательщика
-    #         # "UF_CRM_1732013470": source,  # Источник(воронка)
-    #         "UF_CRM_1727558891776": (
+    #         "UF_CRM_1732013449": application.vacancy.name,  # Вакансия
+    #         "UF_CRM_1732439536": int(application.car_tonnage),  # Грузоподъемность
+    #         "UF_CRM_1732013460": application.tax_status,  # Статус налогоплательщика
+    #         "UF_CRM_1732013470": source,  # Источник(воронка)
+    #         "UF_CRM_1732013482": (
     #             application.invited_date.strftime("%Y-%m-%d")
     #             if application.invited_date
     #             else None
     #         ),  # Дата записи
     #     }
     # }
+    data = {
+        "fields": {
+            "TITLE": title,
+            "NAME": application.full_name,
+            "PHONE": [{"VALUE": application.phone_number, "VALUE_TYPE": "WORK"}],
+            "ADDRESS": application.city.name,
+            # "UF_CRM_1732013449": application.vacancy.name,  # Вакансия
+            "UF_CRM_1727558842072": application.car_tonnage,  # Грузоподъемность
+            "UF_CRM_1727558736573": application.tax_status,  # Статус налогоплательщика
+            # "UF_CRM_1732013470": source,  # Источник(воронка)
+            "UF_CRM_1727558891776": (
+                application.invited_date.strftime("%Y-%m-%d")
+                if application.invited_date
+                else None
+            ),  # Дата записи
+        }
+    }
     try:
         response = requests.post(url, json=data, timeout=10)
         response.raise_for_status()
@@ -157,7 +158,7 @@ def attach_files_to_deal(deal_id, file_ids):
     data = {
         "id": deal_id,
         "fields": {
-            "UF_CRM_673D936E88F7C": file_ids,  # Замените на реальный код пользовательского поля для файлов в сделке
+            "UF_CRM_1732522425": file_ids,  # Замените на реальный код пользовательского поля для файлов в сделке
         },
         "params": {"REGISTER_SONET_EVENT": "Y"},
     }
@@ -187,7 +188,7 @@ def attach_files_to_lead(lead_id, file_id):
     data = {
         "id": lead_id,
         "fields": {
-            "UF_CRM_673D936E88F7C": file_id,  # Замените на реальный код пользовательского поля для файлов в сделке
+            "UF_CRM_1732522425": file_id,  # Замените на реальный код пользовательского поля для файлов в сделке
         },
         "params": {"REGISTER_SONET_EVENT": "Y"},
     }

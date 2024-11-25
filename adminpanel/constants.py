@@ -28,7 +28,7 @@ class ApplicationStatus(models.TextChoices):
 
 class TaxStatus(models.TextChoices):
     SMZ = "СМЗ", "Самозанятый"
-    IP = "152", "Индивидуальный предприниматель"
+    IP = "ИП", "Индивидуальный предприниматель"
     PHYS = "Физ", "Физическое лицо"
 
 
