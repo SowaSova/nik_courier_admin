@@ -18,7 +18,6 @@ def bitrix_webhook(request):
     try:
         # Получаем данные из запроса
         data = request.POST
-        # print(request.POST or request.PATCH or request.UPDATE)
         # Проверяем наличие токена
         token = data.get("auth[application_token]")
         if not token or token != settings.BITRIX_WEBHOOK_TOKEN:
@@ -204,8 +203,10 @@ def map_status_from_bitrix(bitrix_status):
     STATUS_MAPPING = {
         "NEW": "new",
         "IN_PROCESS": "active",
-        "PROCESSED": "closed",
-        # Добавьте остальные соответствия
+        "UC_5IK5JH": "active",
+        "PROCESSED": "active",
+        "UC_RT8PLX": "active",
+        "СONVERTED": "closed",
     }
     return STATUS_MAPPING.get(bitrix_status, bitrix_status.lower())
 

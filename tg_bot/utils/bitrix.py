@@ -16,24 +16,6 @@ def create_lead_in_bitrix(application):
     url = f"{BITRIX_WEBHOOK_URL}{method}"
     source = ProcessingApplicationType(application.source)
     title = f"{application.partner}({source.label})_{application.city.name}_{application.full_name}"
-
-    # data = {  # Тестовый
-    #     "fields": {
-    #         "TITLE": f"Лид от {application.partner}",
-    #         "NAME": application.full_name,
-    #         "PHONE": [{"VALUE": application.phone_number, "VALUE_TYPE": "WORK"}],
-    #         "ADDRESS": application.city.name,
-    #         "UF_CRM_1732013449": application.vacancy.name,  # Вакансия
-    #         "UF_CRM_1732439536": int(application.car_tonnage),  # Грузоподъемность
-    #         "UF_CRM_1732013460": application.tax_status,  # Статус налогоплательщика
-    #         "UF_CRM_1732013470": source,  # Источник(воронка)
-    #         "UF_CRM_1732013482": (
-    #             application.invited_date.strftime("%Y-%m-%d")
-    #             if application.invited_date
-    #             else None
-    #         ),  # Дата записи
-    #     }
-    # }
     data = {
         "fields": {
             "TITLE": title,

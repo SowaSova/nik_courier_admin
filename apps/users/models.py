@@ -61,10 +61,9 @@ class Partner(models.Model):
         verbose_name="Телеграм-пользователь",
     )
     name = models.CharField(max_length=255, verbose_name="ФИО")
-    phone_number = models.CharField(
-        max_length=255, verbose_name="Номер телефона"
-    )
+    phone_number = models.CharField(max_length=255, verbose_name="Номер телефона")
     email = models.EmailField(max_length=255, verbose_name="Email")
+    description = models.TextField(verbose_name="Описание", null=True, blank=True)
     balance = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name="Баланс", default=0
     )
@@ -77,9 +76,7 @@ class Partner(models.Model):
     referal_idx = models.CharField(
         max_length=20, verbose_name="Реферальный индекс", unique=True
     )
-    created_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Дата создания"
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
 
     class Meta:
         verbose_name = "Партнер"
