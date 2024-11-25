@@ -83,7 +83,7 @@ def send_notification_to_channels(self, application_id):
         f"ФИО: {full_name}\n"
         f"Телефон: {phone_number}\n"
         f"Дата записи: {appointment_date}\n"
-        f"Источник: {source}"
+        f"Источник: {application.partner}({source})"
     )
 
     url = f"https://api.telegram.org/bot{settings.BOT_TOKEN}/sendMessage"

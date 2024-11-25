@@ -44,9 +44,7 @@ async def get_vacancy(
     data = await state.get_data()
     vacancy_id = data.get("vacancy_id")
     city_id = data.get("city_id")
-    vacancy = await database_sync_to_async(Vacancy.objects.get)(
-        id=vacancy_id, city_id=city_id
-    )
+    vacancy = await database_sync_to_async(Vacancy.objects.get)(id=vacancy_id)
     city = await database_sync_to_async(City.objects.get)(id=city_id)
     return vacancy, city
 

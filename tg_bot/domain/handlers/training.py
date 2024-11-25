@@ -43,8 +43,13 @@ async def training_menu(
     if not bot_message_text:
         bot_message_text = "Информация о компании есть"
     if media:
-        file = FSInputFile(media.file.path)
-        await callback_query.message.answer_photo(photo=file, caption=bot_message_text)
+        try:
+            file = FSInputFile(media.file.path)
+            await callback_query.message.answer_photo(
+                photo=file, caption=bot_message_text
+            )
+        except Exception as e:
+            await callback_query.message.answer(bot_message_text)
     else:
         await callback_query.message.answer(bot_message_text)
 

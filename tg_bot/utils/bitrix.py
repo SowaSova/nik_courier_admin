@@ -15,7 +15,7 @@ def create_lead_in_bitrix(application):
     method = "crm.lead.add.json"
     url = f"{BITRIX_WEBHOOK_URL}{method}"
     source = ProcessingApplicationType(application.source)
-    title = f"{application.partner}({source})_{application.city.name}_{application.full_name}"
+    title = f"{application.partner}({source.label})_{application.city.name}_{application.full_name}"
 
     # data = {  # Тестовый
     #     "fields": {
@@ -39,7 +39,7 @@ def create_lead_in_bitrix(application):
             "TITLE": title,
             "NAME": application.full_name,
             "PHONE": [{"VALUE": application.phone_number, "VALUE_TYPE": "WORK"}],
-            "ADDRESS": application.city.name,
+            "UF_CRM_1727558363198": application.city.btx_id,  # Город кандидата
             # "UF_CRM_1732013449": application.vacancy.name,  # Вакансия
             "UF_CRM_1727558842072": application.car_tonnage,  # Грузоподъемность
             "UF_CRM_1727558736573": application.tax_status,  # Статус налогоплательщика

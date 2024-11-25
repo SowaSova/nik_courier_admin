@@ -24,16 +24,19 @@ def bitrix_webhook(request):
         if not token or token != settings.BITRIX_WEBHOOK_TOKEN:
             logger.error("Некорректный или отсутствующий токен")
             return HttpResponseBadRequest("Invalid token")
-
         # Обрабатываем событие
         event = data.get("event")
         if event == "ONCRMDEALUPDATE":
             deal_id = data.get("data[FIELDS][ID]")
-            # Ваш код обработки обновления сделки
             process_deal_update(deal_id)
+        elif event == "ONCRMLEADUPDATE":
+            lead_id = data.get("data[FIELDS][ID]")
+            # Ваш код обработки обновления лида
+            process_lead_update(lead_id)
         elif event == "ONCRMLEADUSERFIELDSETENUMVALUES":
             field_name = data.get("data[FIELDS][FIELD_NAME]")
-            if field_name == "UF_CRM_1732439536":
+            print(field_name)
+            if field_name == "UF_CRM_1727558363198":
                 update_city_list()
         else:
             logger.warning(f"Неизвестное событие: {event}")
@@ -42,6 +45,63 @@ def bitrix_webhook(request):
     except Exception as e:
         logger.error(f"Ошибка при обработке вебхука: {e}")
         return HttpResponseBadRequest("Error processing webhook")
+
+
+def process_lead_update(lead_id):
+    import requests
+    from django.conf import settings
+
+    # Получаем детали лида из Bitrix24
+    BITRIX_WEBHOOK_URL = settings.BITRIX_WEBHOOK_URL.format(
+        token=settings.BITRIX_WH_CRM
+    )  # Ваш вебхук URL для вызова методов API
+    method = "crm.lead.get.json"
+    url = f"{BITRIX_WEBHOOK_URL}{method}"
+
+    params = {"id": lead_id}
+
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        result = response.json()
+        if "result" in result:
+            lead = result["result"]
+            # Передаем данные лида для обновления заявки
+            update_application_from_lead(lead)
+        else:
+            logger.error(f"Ошибка при получении лида {lead_id}: {result}")
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Ошибка при обращении к Bitrix24: {e}")
+
+
+def update_application_from_lead(lead):
+    from django.db import transaction
+
+    from apps.applications.models import ProcessingApplication
+    from apps.users.models import Partner
+
+    status = lead.get("STATUS_ID")  # Получаем текущий статус лида
+
+    try:
+        # Ищем заявку по bitrix_lead_id, равному LEAD_ID из лида
+        application = ProcessingApplication.objects.get(bitrix_lead_id=lead["ID"])
+        old_status = application.status  # Сохраняем предыдущий статус
+        new_status = map_status_from_bitrix(status)
+
+        # Проверяем, изменился ли статус
+        if old_status != new_status:
+            with transaction.atomic():
+                application.status = new_status
+                application.save()
+                logger.info(
+                    f"Статус заявки {application.id} изменен с {old_status} на {new_status}"
+                )
+        else:
+            logger.info(f"Статус заявки {application.id} не изменился")
+    except ProcessingApplication.DoesNotExist:
+        logger.error(f"Заявка с bitrix_lead_id={lead['ID']} не найдена.")
+    except Exception as e:
+        logger.error(f"Ошибка при обновлении статуса заявки: {e}")
 
 
 def process_deal_update(deal_id):
@@ -143,8 +203,8 @@ def calculate_reward_difference(application, old_status, new_status):
 def map_status_from_bitrix(bitrix_status):
     STATUS_MAPPING = {
         "NEW": "new",
-        "PREPARATION": "active",
-        "PREPAYMENT_INVOICE": "closed",
+        "IN_PROCESS": "active",
+        "PROCESSED": "closed",
         # Добавьте остальные соответствия
     }
     return STATUS_MAPPING.get(bitrix_status, bitrix_status.lower())
@@ -176,12 +236,14 @@ def get_updated_city_list():
     )  # Ваш вебхук URL для вызова методов API
     method = "crm.lead.fields.json"
     url = f"{BITRIX_WEBHOOK_URL}{method}"
+    print(url)
 
     try:
         response = requests.get(url)
         data = response.json()
         field_id = "UF_CRM_1727558363198"
         field_info = data["result"].get(field_id)
+        print(response.json(), field_info)
         if field_info and "items" in field_info:
             items = field_info["items"]
             cities = []

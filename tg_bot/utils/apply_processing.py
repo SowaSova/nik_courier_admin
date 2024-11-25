@@ -24,7 +24,7 @@ async def presave_application(
     data = await state.get_data()
     if not data.get("vacancy_id"):
         vacancy, _ = await database_sync_to_async(Vacancy.objects.get_or_create)(
-            name="Курьер", city_id=None
+            name="Курьер"
         )
     application = await database_sync_to_async(ProcessingApplication.objects.create)(
         user=user,
@@ -50,9 +50,7 @@ async def finalize_application(
 ):
     data = await state.get_data()
     if not data.get("vacancy_id"):
-        vacancy, _ = await sync_to_async(Vacancy.objects.get_or_create)(
-            name="Курьер", city_id=None
-        )
+        vacancy, _ = await sync_to_async(Vacancy.objects.get_or_create)(name="Курьер")
     source = (
         ProcessingApplicationType.REFERRAL
         if data.get("referral") and data.get("referral") == True
