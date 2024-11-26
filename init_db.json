@@ -19,7 +19,6 @@
 },
 {
     "model": "users.telegramuser",
-    
     "pk": 1,
     "fields": {
         "telegram_id": 287077132,

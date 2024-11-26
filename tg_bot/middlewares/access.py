@@ -42,6 +42,7 @@ class AccessMiddleware(BaseMiddleware):
 
                     user.is_verified = True
                     user.invited_by_id = partner.user_id
+                    user.invited_by_partner = partner.id
                     await sync_to_async(user.save)()
                 except Partner.DoesNotExist:
                     await event.message.answer(
@@ -60,8 +61,10 @@ class AccessMiddleware(BaseMiddleware):
                     )
                 return
         try:
-            data["partner"] = await Partner.objects.aget(pk=user.invited_by_id)
+            data["partner"] = await Partner.objects.aget(pk=user.invited_by_partner)
         except Partner.DoesNotExist:
-            data["partner"] = None
+            data["partner"] = (
+                await Partner.objects.aget(user_id=user.invited_by_id) or None
+            )
         data["user"] = user
         return await handler(event, data)

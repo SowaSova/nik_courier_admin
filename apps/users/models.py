@@ -18,6 +18,9 @@ class TelegramUser(models.Model):
         verbose_name="Пригласил",
         related_name="referrals",
     )
+    invited_by_partner = models.BigIntegerField(
+        verbose_name="От партнёра", null=True, blank=True
+    )
     is_partner = models.BooleanField(default=False, verbose_name="Партнёр")
     is_verified = models.BooleanField(default=False, verbose_name="Подтверждён")
     created_at = models.DateTimeField(
@@ -56,13 +59,21 @@ class Partner(models.Model):
     user = models.OneToOneField(
         TelegramUser,
         on_delete=models.CASCADE,
-        primary_key=True,
         related_name="partner_profile",
         verbose_name="Телеграм-пользователь",
+        blank=True,
+        null=True,
     )
     name = models.CharField(max_length=255, verbose_name="ФИО")
-    phone_number = models.CharField(max_length=255, verbose_name="Номер телефона")
-    email = models.EmailField(max_length=255, verbose_name="Email")
+    phone_number = models.CharField(
+        max_length=255, verbose_name="Номер телефона", null=True, blank=True
+    )
+    email = models.EmailField(
+        max_length=255, verbose_name="Email", null=True, blank=True
+    )
+    btx_id = models.BigIntegerField(
+        verbose_name="ID партнера в Битриксе", null=True, unique=True, blank=True
+    )
     description = models.TextField(verbose_name="Описание", null=True, blank=True)
     balance = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name="Баланс", default=0
@@ -74,7 +85,11 @@ class Partner(models.Model):
         verbose_name="Тип воронки",
     )
     referal_idx = models.CharField(
-        max_length=20, verbose_name="Реферальный индекс", unique=True
+        max_length=20,
+        verbose_name="Реферальный индекс",
+        unique=True,
+        null=True,
+        blank=True,
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
 
@@ -90,8 +105,8 @@ class Partner(models.Model):
 
         if not self.referal_idx:
             self.referal_idx = secrets.token_urlsafe(10)
-
-        self.user.is_partner = True
-        self.user.save()
+        if self.user:
+            self.user.is_partner = True
+            self.user.save()
 
         super().save(*args, **kwargs)

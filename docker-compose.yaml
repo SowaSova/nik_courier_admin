@@ -41,7 +41,7 @@ services:
       start_period: 10s
 
   redis:
-    image: redis:6
+    image: redis
     ports:
       - "6379:6379"
 

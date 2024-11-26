@@ -7,25 +7,27 @@ def create_lead_in_bitrix(application):
     import requests
     from django.conf import settings
 
-    from apps.applications.models import ProcessingApplicationType
-
     BITRIX_WEBHOOK_URL = settings.BITRIX_WEBHOOK_URL.format(
         token=settings.BITRIX_WH_CRM
     )
     method = "crm.lead.add.json"
     url = f"{BITRIX_WEBHOOK_URL}{method}"
-    source = ProcessingApplicationType(application.source)
-    title = f"{application.partner}({source.label})_{application.city.name}_{application.full_name}"
+    source = "1914"  # РЕФЕРАЛЬНЫЙ (ТГ)
+    name = application.full_name.split(" ")[0]
+    last_name = application.full_name.split(" ")[1]
+    title = f"{application.partner}_{application.city.name}_{name}_{last_name}"
     data = {
         "fields": {
             "TITLE": title,
-            "NAME": application.full_name,
+            "NAME": name,
+            "LAST_NAME": last_name,
             "PHONE": [{"VALUE": application.phone_number, "VALUE_TYPE": "WORK"}],
             "UF_CRM_1727558363198": application.city.btx_id,  # Город кандидата
             # "UF_CRM_1732013449": application.vacancy.name,  # Вакансия
             "UF_CRM_1727558842072": application.car_tonnage,  # Грузоподъемность
             "UF_CRM_1727558736573": application.tax_status,  # Статус налогоплательщика
-            # "UF_CRM_1732013470": source,  # Источник(воронка)
+            "UF_CRM_1727559062022": source,  # Канал поступления
+            "UF_CRM_1727557777158": application.partner.btx_id,  # Партнер
             "UF_CRM_1727558891776": (
                 application.invited_date.strftime("%Y-%m-%d")
                 if application.invited_date
