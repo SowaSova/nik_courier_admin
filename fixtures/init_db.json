@@ -1,58 +1,5 @@
 [
 {
-    "model": "auth.user",
-    "pk": 1,
-    "fields": {
-        "password": "pbkdf2_sha256$870000$OWPZyGjAjjCgxeUbzGevo2$tJqvi506Ej9pBvRZKjo1jO2Sb60l03u1XCvc1+jUhfg=",
-        "last_login": "2024-11-26T11:08:48.903Z",
-        "is_superuser": true,
-        "username": "admin",
-        "first_name": "",
-        "last_name": "",
-        "email": "",
-        "is_staff": true,
-        "is_active": true,
-        "date_joined": "2024-11-25T13:29:38.866Z",
-        "groups": [],
-        "user_permissions": []
-    }
-},
-{
-    "model": "users.telegramuser",
-    
-    "pk": 1,
-    "fields": {
-        "telegram_id": 287077132,
-        "tg_username": "AkiraSansa",
-        "invited_by": 1,
-        "invited_by_partner": null,
-        "is_partner": true,
-        "is_verified": true,
-        "created_at": "2024-11-25T13:34:03.709Z"
-    }
-},
-{
-    "model": "users.telegramuser",
-    "pk": 4,
-    "fields": {
-        "telegram_id": 5591428997,
-        "tg_username": "eenoemos",
-        "invited_by": 4,
-        "invited_by_partner": 445,
-        "is_partner": false,
-        "is_verified": true,
-        "created_at": "2024-11-26T12:07:51.286Z"
-    }
-},
-{
-    "model": "users.telegramchannel",
-    "pk": 1,
-    "fields": {
-        "name": "SowaTestChannel",
-        "chat_id": "-1002390504012"
-    }
-},
-{
     "model": "users.partner",
     "pk": 401,
     "fields": {
@@ -757,44 +704,6 @@
     }
 },
 {
-    "model": "users.partner",
-    "pk": 445,
-    "fields": {
-        "user": null,
-        "name": "Тестовый менеджер (CPA)",
-        "phone_number": null,
-        "email": null,
-        "btx_id": 1978,
-        "description": null,
-        "balance": "0.00",
-        "proccess_type": "funnel_cpa",
-        "referal_idx": "ixBxLucyp4l_Uw",
-        "created_at": "2024-11-26T11:35:07.797Z"
-    }
-},
-{
-    "model": "applications.processingapplication",
-    "pk": 10,
-    "fields": {
-        "status": "new",
-        "created_at": "2024-11-26T12:13:37.265Z",
-        "updated_at": "2024-11-26T12:14:22.387Z",
-        "user": 4,
-        "partner": 445,
-        "bitrix_lead_id": "9486",
-        "is_finalized": true,
-        "full_name": "Тестовое имя",
-        "phone_number": "012346578",
-        "city": 7,
-        "vacancy": 1,
-        "car_tonnage": "1106",
-        "tax_status": "150",
-        "source": "referral",
-        "invited_date": "2024-11-29",
-        "reward_amount": "1000.00"
-    }
-},
-{
     "model": "vacancies.vacancy",
     "pk": 1,
     "fields": {
@@ -1191,10 +1100,10 @@
     "pk": 1,
     "fields": {
         "identifier": 1,
-        "text": "Добро пожаловать, Партнёр!",
+        "text": "Добро пожаловать!\r\nПродолжая использовать данного бота Вы автоматически даёте согласие на обработку персональных данных, в соответствии с Федеральным законом от 27.07.2006 года № 152-ФЗ \"О персональных данных\", на условиях и для целей, определённых в Согласии на обработку персональных данных.",
         "media": null,
         "created_at": "2024-11-18T07:25:22.863Z",
-        "updated_at": "2024-11-18T07:25:22.863Z"
+        "updated_at": "2024-11-28T12:48:28.736Z"
     }
 },
 {
@@ -1202,10 +1111,10 @@
     "pk": 2,
     "fields": {
         "identifier": 2,
-        "text": "Добро пожаловать, Курьер!",
+        "text": "Добро пожаловать!\r\nПродолжая использовать данного бота Вы автоматически даёте согласие на обработку персональных данных, в соответствии с Федеральным законом от 27.07.2006 года № 152-ФЗ \"О персональных данных\", на условиях и для целей, определённых в Согласии на обработку персональных данных.",
         "media": null,
         "created_at": "2024-11-18T07:25:36.132Z",
-        "updated_at": "2024-11-18T07:25:36.132Z"
+        "updated_at": "2024-11-28T12:48:15.298Z"
     }
 },
 {
@@ -1213,10 +1122,10 @@
     "pk": 3,
     "fields": {
         "identifier": 3,
-        "text": "Вы выбрали город: {city_name}. Пожалуйста, введите полностью Ваше ФИО:",
+        "text": "Вы выбрали город: {city_name}. Пожалуйста, введите полностью Имя и Фамилию  через пробел:",
         "media": null,
         "created_at": "2024-11-18T07:47:50.789Z",
-        "updated_at": "2024-11-18T07:47:50.789Z"
+        "updated_at": "2024-11-26T15:58:26.155Z"
     }
 },
 {
@@ -1744,6 +1653,7 @@
         "message": 1,
         "text": "👤 Личный кабинет",
         "button_type": "callback",
+        "is_active": true,
         "payload": "personal_cabinet",
         "order": 1
     }
@@ -1755,6 +1665,7 @@
         "message": 1,
         "text": "📩 Разместить заявку",
         "button_type": "callback",
+        "is_active": true,
         "payload": "start_application",
         "order": 2
     }
@@ -1766,6 +1677,7 @@
         "message": 1,
         "text": "🔗 Реферальные ссылки",
         "button_type": "callback",
+        "is_active": true,
         "payload": "referral_links",
         "order": 3
     }
@@ -1777,6 +1689,7 @@
         "message": 1,
         "text": "🏫 Обучение",
         "button_type": "callback",
+        "is_active": true,
         "payload": "training",
         "order": 4
     }
@@ -1788,6 +1701,7 @@
         "message": 8,
         "text": "Самозанятый",
         "button_type": "text",
+        "is_active": true,
         "payload": "152",
         "order": 1
     }
@@ -1799,6 +1713,7 @@
         "message": 8,
         "text": "Инд.предприниматель",
         "button_type": "text",
+        "is_active": true,
         "payload": "150",
         "order": 2
     }
@@ -1810,6 +1725,7 @@
         "message": 8,
         "text": "Не оформлен",
         "button_type": "text",
+        "is_active": true,
         "payload": "656",
         "order": 3
     }
@@ -1821,6 +1737,7 @@
         "message": 9,
         "text": "0,5 - тонн (Легковое авто)",
         "button_type": "text",
+        "is_active": true,
         "payload": "156",
         "order": 1
     }
@@ -1832,6 +1749,7 @@
         "message": 9,
         "text": "до 1 тонны (Каблук или микроавтобус)",
         "button_type": "text",
+        "is_active": true,
         "payload": "158",
         "order": 2
     }
@@ -1843,6 +1761,7 @@
         "message": 9,
         "text": "1,5 тонны (Газели и др.)",
         "button_type": "text",
+        "is_active": true,
         "payload": "160",
         "order": 3
     }
@@ -1854,6 +1773,7 @@
         "message": 9,
         "text": "Штат (авто компании)",
         "button_type": "text",
+        "is_active": true,
         "payload": "1106",
         "order": 4
     }
@@ -1865,6 +1785,7 @@
         "message": 9,
         "text": "Несколько машин (ИП,ООО и др.)",
         "button_type": "text",
+        "is_active": true,
         "payload": "1284",
         "order": 5
     }
@@ -1876,6 +1797,7 @@
         "message": 10,
         "text": "Загрузить документы сейчас",
         "button_type": "callback",
+        "is_active": false,
         "payload": "upload_now",
         "order": 1
     }
@@ -1887,6 +1809,7 @@
         "message": 10,
         "text": "Назначить дату для предоставления документов",
         "button_type": "callback",
+        "is_active": true,
         "payload": "schedule_date",
         "order": 2
     }
@@ -1898,6 +1821,7 @@
         "message": 21,
         "text": "Новая",
         "button_type": "callback",
+        "is_active": true,
         "payload": "new",
         "order": 1
     }
@@ -1909,6 +1833,7 @@
         "message": 21,
         "text": "В работе",
         "button_type": "callback",
+        "is_active": true,
         "payload": "active",
         "order": 2
     }
@@ -1920,6 +1845,7 @@
         "message": 21,
         "text": "Завершена",
         "button_type": "callback",
+        "is_active": true,
         "payload": "closed",
         "order": 3
     }
@@ -1931,6 +1857,7 @@
         "message": 23,
         "text": "Информация о компании",
         "button_type": "callback",
+        "is_active": true,
         "payload": "company_info",
         "order": 0
     }
@@ -1942,6 +1869,7 @@
         "message": 23,
         "text": "Информация по кандидатам",
         "button_type": "callback",
+        "is_active": true,
         "payload": "application_info",
         "order": 1
     }
@@ -1953,6 +1881,7 @@
         "message": 8,
         "text": "Штат (на авто компании)",
         "button_type": "text",
+        "is_active": true,
         "payload": "1212",
         "order": 4
     }
@@ -1964,6 +1893,7 @@
         "message": 8,
         "text": "Юридическое Лицо (все кроме ИП)",
         "button_type": "text",
+        "is_active": true,
         "payload": "1308",
         "order": 5
     }

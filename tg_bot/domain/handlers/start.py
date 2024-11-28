@@ -11,6 +11,7 @@ from tg_bot.domain.keyboards.city_choice import send_cities_keyboard
 from tg_bot.domain.states.application import ApplicationForm
 from tg_bot.utils import application_exists, with_bot_message
 from tg_bot.utils.bot_config import (
+    create_persistent_keyboard,
     create_reply_markup,
     get_bot_message,
     send_bot_message,
@@ -31,8 +32,14 @@ async def process_start_command(
 ):
     if user.is_partner:
         if not bot_message_text:
-            bot_message_text = "Добро пожаловать, {name}!"
+            bot_message_text = """
+            Добро пожаловать, {name}!
+            Продолжая использовать данного бота Вы автоматически даёте согласие на обработку персональных данных, 
+            в соответствии с Федеральным законом от 27.07.2006 года № 152-ФЗ "О персональных данных", 
+            на условиях и для целей, определённых в Согласии на обработку персональных данных. 
+            """
         reply_markup = create_reply_markup(buttons)
+        # reply_markup = create_persistent_keyboard(buttons)
         await send_bot_message(message, bot_message_text, media, reply_markup, user)
     else:
         (

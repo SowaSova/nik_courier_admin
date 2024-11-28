@@ -21,12 +21,8 @@ class BotMessage(models.Model):
         related_name="messages",
         verbose_name="Медиа",
     )
-    created_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Дата создания"
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True, verbose_name="Дата обновления"
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
 
     class Meta:
         verbose_name = "Сообщение бота"
@@ -43,9 +39,7 @@ class BotMessageType(models.Model):
         verbose_name="Название типа",
         help_text="Например: 'start'",
     )
-    description = models.TextField(
-        verbose_name="Описание", null=True, blank=True
-    )
+    description = models.TextField(verbose_name="Описание", null=True, blank=True)
 
     class Meta:
         verbose_name = "Тип сообщения бота"
@@ -69,12 +63,11 @@ class BotButton(models.Model):
         default=ButtonType.TEXT,
         verbose_name="Тип кнопки",
     )
+    is_active = models.BooleanField(default=True, verbose_name="Активность кнопки")
     payload = models.CharField(
         max_length=255, null=True, blank=True, verbose_name="Полезная нагрузка"
     )
-    order = models.PositiveIntegerField(
-        default=0, verbose_name="Порядок отображения"
-    )
+    order = models.PositiveIntegerField(default=0, verbose_name="Порядок отображения")
 
     class Meta:
         verbose_name = "Кнопка бота"
@@ -104,9 +97,7 @@ class BotMedia(models.Model):
     description = models.CharField(
         max_length=255, null=True, blank=True, verbose_name="Описание"
     )
-    created_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Дата создания"
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
 
     class Meta:
         verbose_name = "Медиа бота"

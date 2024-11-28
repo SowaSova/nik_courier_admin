@@ -108,5 +108,9 @@ class Partner(models.Model):
         if self.user:
             self.user.is_partner = True
             self.user.save()
+        if not self.btx_id:
+            from .services import create_responsible_person_in_bitrix
+
+            self.btx_id = create_responsible_person_in_bitrix(self)
 
         super().save(*args, **kwargs)

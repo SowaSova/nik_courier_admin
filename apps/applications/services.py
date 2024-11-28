@@ -87,6 +87,7 @@ def map_status_from_bitrix(bitrix_status):
     return STATUS_MAPPING.get(bitrix_status, bitrix_status.lower())
 
 
+@transaction.atomic
 def update_city_list():
     cities = get_updated_city_list()
     existing_city_ids = set(City.objects.values_list("btx_id", flat=True))
@@ -175,6 +176,7 @@ def get_updated_partner_list():
         return []
 
 
+@transaction.atomic
 def update_partner_list():
     partners = get_updated_partner_list()
     existing_partner_ids = set(Partner.objects.values_list("btx_id", flat=True))

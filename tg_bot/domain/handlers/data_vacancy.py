@@ -2,6 +2,7 @@ from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 
+from apps.geo.models import City
 from apps.users.models import Partner, TelegramUser
 from tg_bot.domain.callbacks import VacancyCallback
 from tg_bot.domain.states import ApplicationForm
@@ -37,8 +38,12 @@ async def process_vacancy_choice(
         await callback_query.answer()
 
     elif current_state and current_state.startswith(ApplicationForm.__name__):
+        data = await state.get_data()
+        city = await City.objects.aget(id=data.get("city_id"))
+        msg, _, _ = await get_bot_message("city_selected_referral_fullname")
         await callback_query.message.edit_text(
-            "Пожалуйста, введите полностью Ваше ФИО:"
+            msg.format(city_name=city.name if city else "----")
+            or "Пожалуйста, введите полностью Имя и Фамилию через пробел:"
         )
         await state.set_state(ApplicationForm.WaitingForFullName)
         await callback_query.answer()

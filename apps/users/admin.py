@@ -39,6 +39,7 @@ class PartnerAdmin(admin.ModelAdmin):
     readonly_fields = [
         "created_at",
         "referal_idx",
+        "btx_id",
     ]
     ordering = ["-created_at"]
     show_facets = admin.ShowFacets.ALWAYS

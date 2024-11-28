@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from aiogram import F, Router
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, Message
 from asgiref.sync import sync_to_async
 
 from adminpanel.constants import ApplicationStatus

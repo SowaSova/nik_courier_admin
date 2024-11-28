@@ -1,9 +1,5 @@
 import logging
-import sys
-from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
-from pathlib import Path
-
-from tg_bot.core.config import settings
+from logging.handlers import TimedRotatingFileHandler
 
 
 def setup_logging():

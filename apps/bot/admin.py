@@ -9,7 +9,7 @@ from .models import BotButton, BotMedia, BotMessage, BotMessageType
 
 @admin.register(BotButton)
 class BotButtonAdmin(admin.ModelAdmin):
-    list_display = ["payload", "text", "message"]
+    list_display = ["payload", "text", "button_type", "message"]
     ordering = ["message", "order"]
 
 

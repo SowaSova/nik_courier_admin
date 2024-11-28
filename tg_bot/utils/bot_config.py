@@ -5,9 +5,11 @@ from aiogram.types import (
     FSInputFile,
     InlineKeyboardButton,
     InlineKeyboardMarkup,
+    KeyboardButton,
     Message,
+    ReplyKeyboardMarkup,
 )
-from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 from asgiref.sync import sync_to_async
 
 from adminpanel.constants import MediaType
@@ -21,7 +23,9 @@ async def get_bot_message(
         bot_message = await BotMessage.objects.select_related("media").aget(
             identifier__name=identifier
         )
-        buttons = await sync_to_async(list)(bot_message.buttons.order_by("order").all())
+        buttons = await sync_to_async(list)(
+            bot_message.buttons.order_by("order").filter(is_active=True)
+        )
         media = bot_message.media
         return bot_message.text, media, buttons
     except BotMessage.DoesNotExist:
@@ -43,6 +47,21 @@ def create_reply_markup(
     if len(buttons) % 2 == 0:
         builder.adjust(2)
     return builder.as_markup()
+
+
+def create_persistent_keyboard(buttons: List[BotButton]) -> ReplyKeyboardMarkup:
+    keyboard = ReplyKeyboardBuilder()
+    for button in sorted(buttons, key=lambda x: x.order):
+        keyboard.add(KeyboardButton(text=button.text))
+
+    if len(buttons) % 2 == 1:
+        keyboard.adjust(1)
+    if len(buttons) % 2 == 0:
+        keyboard.adjust(2)
+
+    return keyboard.as_markup(
+        resize_keyboard=True,
+    )
 
 
 async def send_bot_message(
