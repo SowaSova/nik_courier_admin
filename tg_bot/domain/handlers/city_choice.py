@@ -5,6 +5,7 @@ from asgiref.sync import sync_to_async
 
 from apps.geo.models import City
 from apps.users.models import TelegramUser
+from tg_bot.domain import keyboards as kb
 from tg_bot.domain.callbacks import CityCallback
 from tg_bot.domain.keyboards import create_calendar
 from tg_bot.domain.keyboards.vacancy_choice import send_vacancies_keyboard
@@ -66,10 +67,12 @@ async def city_selected(
             bot_message_text, media, buttons = await get_bot_message(
                 "city_selected_referral_fullname"
             )
+            # back_btn = kb.get_back_button_or_builder("city_choice")
             if not bot_message_text:
-                bot_message_text = "Вы выбрали город: {city_name}. Пожалуйста, введите полностью Ваше ФИО:"
+                bot_message_text = "Вы выбрали город: {city_name}. Пожалуйста, введите полностью Имя и Фамилию через пробел:"
 
             message_text = bot_message_text.format(city_name=city.name)
+            await state.update_data(prompt_message_id=message_text.message_id)
             await callback_query.message.edit_text(message_text)
             await state.set_state(ApplicationForm.WaitingForFullName)
         else:

@@ -2,6 +2,8 @@ from aiogram import Dispatcher
 
 from .calendar import router as calendar_router
 from .city_choice import router as city_choice_router
+
+# from .control import router as control_router
 from .create_apply import router as create_apply_router
 from .data_appointment import router as appointment_router
 from .data_car import router as car_router
@@ -36,4 +38,5 @@ def register_handlers(dp: Dispatcher):
         create_apply_router,
         data_vacancy_router,
         training_router,
+        # control_router,
     )
