@@ -135,20 +135,28 @@ def send_notification_to_channels(self, application_id):
 
 @shared_task
 def send_scheduled_messages():
-    # Инициализируем бота
     bot = Bot(token=settings.BOT_TOKEN)
-
     now = timezone.now()
     messages_to_send = list(
         BroadcastMessage.objects.filter(Q(scheduled_time__lte=now) & Q(is_sent=False))
     )
+
     if not messages_to_send:
         logging.info("Нет сообщений для отправки")
         async_to_sync(bot.session.close)()
         return
-    users = list(TelegramUser.objects.all())
 
     for message in messages_to_send:
+        # Если указан город, фильтруем по нему
+        if message.city:
+            # Выбираем пользователей, у которых есть ProcessingApplication с нужным городом
+            users = TelegramUser.objects.filter(
+                is_partner=False, processing_application__city=message.city
+            ).distinct()
+        else:
+            # Если город не указан, берем всех пользователей без партнера
+            users = TelegramUser.objects.filter(is_partner=False)
+
         for user in users:
             try:
                 if message.attachments:
@@ -171,10 +179,10 @@ def send_scheduled_messages():
                     f"Непредвиденная ошибка при отправке сообщения пользователю {user.telegram_id}: {e}"
                 )
 
+        # Помечаем сообщение как отправленное
         message.is_sent = True
         message.save()
 
-    # Закрываем сессию бота
     async_to_sync(bot.session.close)()
 
 

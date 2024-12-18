@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 echo "Применение миграций..."
 python manage.py makemigrations
 python manage.py migrate
