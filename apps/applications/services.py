@@ -106,8 +106,6 @@ def update_city_list():
 
 
 def get_updated_city_list():
-    from apps.applications.models import City
-
     # Получаем список городов из Bitrix24
     BITRIX_WEBHOOK_URL = settings.BITRIX_WEBHOOK_URL.format(
         token=settings.BITRIX_WH_CRM

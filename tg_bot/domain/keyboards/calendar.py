@@ -5,12 +5,14 @@ from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
-def create_calendar(
-    year: int = datetime.now(tz=None).year,
-    month: int = datetime.now(tz=None).month,
-):
+def create_calendar(year: int = None, month: int = None):
+    now = datetime.now(tz=None)
+    if year is None:
+        year = now.year
+    if month is None:
+        month = now.month
+
     builder = InlineKeyboardBuilder()
-    keyboard = []
     # Заголовок с месяцем и годом
     row = []
     row.append(
@@ -30,9 +32,7 @@ def create_calendar(
         row = []
         for day in week:
             if day == 0:
-                row.append(
-                    InlineKeyboardButton(text=" ", callback_data="ignore")
-                )
+                row.append(InlineKeyboardButton(text=" ", callback_data="ignore"))
             else:
                 row.append(
                     InlineKeyboardButton(

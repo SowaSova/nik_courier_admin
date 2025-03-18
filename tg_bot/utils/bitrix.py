@@ -191,7 +191,6 @@ def upload_file_to_bitrix(document):
     import base64
     import os
 
-    import requests
     from django.conf import settings
 
     logger = logging.getLogger(__name__)
