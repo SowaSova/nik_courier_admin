@@ -2,9 +2,7 @@ from typing import List, Optional
 
 from aiogram import Router
 from aiogram.fsm.context import FSMContext
-from aiogram.types import (
-    CallbackQuery,
-)
+from aiogram.types import CallbackQuery
 
 from adminpanel.constants import CarTonnage
 from apps.bot.models import BotButton, BotMedia

@@ -1,12 +1,7 @@
 from django.db import models
 
-from adminpanel.constants import (
-    ApplicationStatus,
-    CarTonnage,
-    DocumentType,
-    ProcessingApplicationType,
-    TaxStatus,
-)
+from adminpanel.constants import (ApplicationStatus, CarTonnage, DocumentType,
+                                  ProcessingApplicationType, TaxStatus)
 from apps.geo.models import City
 from apps.users.models import TelegramUser
 from apps.vacancies.models import Vacancy

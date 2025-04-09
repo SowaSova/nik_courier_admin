@@ -1,14 +1,9 @@
 from functools import wraps
 from typing import Any, Callable, List, Optional, Tuple
 
-from aiogram.types import (
-    FSInputFile,
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-    KeyboardButton,
-    Message,
-    ReplyKeyboardMarkup,
-)
+from aiogram.types import (FSInputFile, InlineKeyboardButton,
+                           InlineKeyboardMarkup, KeyboardButton, Message,
+                           ReplyKeyboardMarkup)
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 from asgiref.sync import sync_to_async
 

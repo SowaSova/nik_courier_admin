@@ -7,11 +7,8 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from apps.applications.services import (
-    process_lead_update,
-    update_city_list,
-    update_partner_list,
-)
+from apps.applications.services import (process_lead_update, update_city_list,
+                                        update_partner_list)
 from apps.geo.models import City
 
 logger = logging.getLogger(__name__)

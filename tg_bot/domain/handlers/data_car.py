@@ -1,8 +1,6 @@
 from aiogram import Router
 from aiogram.fsm.context import FSMContext
-from aiogram.types import (
-    CallbackQuery,
-)
+from aiogram.types import CallbackQuery
 
 from apps.users.models import TelegramUser
 from tg_bot.domain.keyboards.calendar import create_calendar

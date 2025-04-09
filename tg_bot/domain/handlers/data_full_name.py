@@ -7,11 +7,8 @@ from aiogram.types import Message
 from apps.bot.models import BotButton, BotMedia
 from apps.users.models import TelegramUser
 from tg_bot.domain.states import ApplicationForm
-from tg_bot.utils.bot_config import (
-    create_reply_markup,
-    send_bot_message,
-    with_bot_message,
-)
+from tg_bot.utils.bot_config import (create_reply_markup, send_bot_message,
+                                     with_bot_message)
 
 router = Router()
 

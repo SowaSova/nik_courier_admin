@@ -10,12 +10,9 @@ from apps.users.models import TelegramUser
 from tg_bot.domain.keyboards.city_choice import send_cities_keyboard
 from tg_bot.domain.states.application import ApplicationForm
 from tg_bot.utils import application_exists, with_bot_message
-from tg_bot.utils.bot_config import (
-    create_persistent_keyboard,
-    create_reply_markup,
-    get_bot_message,
-    send_bot_message,
-)
+from tg_bot.utils.bot_config import (create_persistent_keyboard,
+                                     create_reply_markup, get_bot_message,
+                                     send_bot_message)
 
 router = Router()
 

@@ -21,12 +21,10 @@ logger = logging.getLogger(__name__)
 @shared_task
 def send_to_bitrix(application_id):
     from apps.applications.models import Document, ProcessingApplication
-    from tg_bot.utils.bitrix import (
-        attach_files_to_deal,
-        attach_files_to_lead,
-        create_lead_in_bitrix,
-        upload_documents_to_bitrix,
-    )
+    from tg_bot.utils.bitrix import (attach_files_to_deal,
+                                     attach_files_to_lead,
+                                     create_lead_in_bitrix,
+                                     upload_documents_to_bitrix)
 
     try:
         application = ProcessingApplication.objects.get(id=application_id)

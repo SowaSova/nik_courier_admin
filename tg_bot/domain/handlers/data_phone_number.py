@@ -8,11 +8,8 @@ from apps.bot.models import BotButton, BotMedia
 from apps.users.models import Partner, TelegramUser
 from tg_bot.domain.states import ApplicationForm
 from tg_bot.utils.apply_processing import presave_application
-from tg_bot.utils.bot_config import (
-    create_reply_markup,
-    send_bot_message,
-    with_bot_message,
-)
+from tg_bot.utils.bot_config import (create_reply_markup, send_bot_message,
+                                     with_bot_message)
 
 router = Router()
 

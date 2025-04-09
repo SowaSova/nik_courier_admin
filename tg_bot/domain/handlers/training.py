@@ -8,11 +8,8 @@ from apps.bot.models import BotButton, BotMedia
 from apps.users.models import Partner, TelegramUser
 from tg_bot.domain.keyboards.city_choice import send_cities_keyboard
 from tg_bot.domain.states import TrainingCandidateForm
-from tg_bot.utils.bot_config import (
-    create_reply_markup,
-    get_bot_message,
-    with_bot_message,
-)
+from tg_bot.utils.bot_config import (create_reply_markup, get_bot_message,
+                                     with_bot_message)
 
 router = Router()
 

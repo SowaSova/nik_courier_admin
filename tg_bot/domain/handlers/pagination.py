@@ -2,10 +2,8 @@ from aiogram import Router
 from aiogram.types import CallbackQuery
 
 from tg_bot.domain.callbacks import PaginationCallback
-from tg_bot.domain.keyboards import (
-    send_cities_keyboard,
-    send_vacancies_keyboard,
-)
+from tg_bot.domain.keyboards import (send_cities_keyboard,
+                                     send_vacancies_keyboard)
 
 router = Router()
 

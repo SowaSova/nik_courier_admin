@@ -8,11 +8,8 @@ from django.conf import settings
 from apps.bot.models import BotButton, BotMedia
 from apps.users.models import Partner, TelegramUser
 from tg_bot.utils import count_applies_from_referral
-from tg_bot.utils.bot_config import (
-    create_reply_markup,
-    send_bot_message,
-    with_bot_message,
-)
+from tg_bot.utils.bot_config import (create_reply_markup, send_bot_message,
+                                     with_bot_message)
 
 router = Router()
 

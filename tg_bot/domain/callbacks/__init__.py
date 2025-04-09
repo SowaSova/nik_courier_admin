@@ -1,6 +1,2 @@
-from .callbacks import (
-    ApplicationStatusCallback,
-    CityCallback,
-    PaginationCallback,
-    VacancyCallback,
-)
+from .callbacks import (ApplicationStatusCallback, CityCallback,
+                        PaginationCallback, VacancyCallback)

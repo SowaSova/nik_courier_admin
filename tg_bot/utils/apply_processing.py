@@ -11,11 +11,8 @@ from apps.applications.models import Document, ProcessingApplication
 from apps.users.models import Partner, TelegramUser
 from apps.vacancies.models import Vacancy
 from tg_bot.tasks import send_notification_to_channels, send_to_bitrix
-from tg_bot.utils.bot_config import (
-    create_reply_markup,
-    get_bot_message,
-    send_bot_message,
-)
+from tg_bot.utils.bot_config import (create_reply_markup, get_bot_message,
+                                     send_bot_message)
 
 
 async def presave_application(
